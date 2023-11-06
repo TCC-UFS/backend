@@ -5,6 +5,12 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalLegisAmbiental.API", "PortalLegisAmbiental.API.csproj", "{DFCF1847-BF3A-4923-AFAE-39165A5D4B3F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortallegisAmbiental.Application", "..\PortallegisAmbiental.Application\PortallegisAmbiental.Application.csproj", "{69E5B358-E38A-4D66-9219-14CF39DD85A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortallegisAmbiental.Domain", "..\PortallegisAmbiental.Domain\PortallegisAmbiental.Domain.csproj", "{5E4BF870-4128-445D-9F1C-3C675900A117}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortallegisAmbiental.Infrastructure", "..\PortallegisAmbiental.Infrastructure\PortallegisAmbiental.Infrastructure.csproj", "{BD30CD1A-94AC-49CF-8440-E00AE2E8DE2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{DFCF1847-BF3A-4923-AFAE-39165A5D4B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFCF1847-BF3A-4923-AFAE-39165A5D4B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFCF1847-BF3A-4923-AFAE-39165A5D4B3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69E5B358-E38A-4D66-9219-14CF39DD85A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69E5B358-E38A-4D66-9219-14CF39DD85A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69E5B358-E38A-4D66-9219-14CF39DD85A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69E5B358-E38A-4D66-9219-14CF39DD85A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E4BF870-4128-445D-9F1C-3C675900A117}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E4BF870-4128-445D-9F1C-3C675900A117}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E4BF870-4128-445D-9F1C-3C675900A117}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E4BF870-4128-445D-9F1C-3C675900A117}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD30CD1A-94AC-49CF-8440-E00AE2E8DE2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD30CD1A-94AC-49CF-8440-E00AE2E8DE2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD30CD1A-94AC-49CF-8440-E00AE2E8DE2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD30CD1A-94AC-49CF-8440-E00AE2E8DE2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
