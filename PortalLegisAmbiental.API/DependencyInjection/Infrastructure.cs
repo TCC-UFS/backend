@@ -1,4 +1,4 @@
-﻿using PortalLegisAmbiental.Infrastructure;
+﻿using PortalLegisAmbiental.Infrastructure.MySQL;
 
 namespace PortalLegisAmbiental.API.DependencyInjection
 {

@@ -5,17 +5,22 @@ using PortalLegisAmbiental.Domain.Seedwork;
 using PortalLegisAmbiental.Domain.Entities;
 using PortalLegisAmbiental.Domain.Enums;
 using System.Data;
+using MySqlConnector;
 
-namespace PortalLegisAmbiental.Infrastructure
+namespace PortalLegisAmbiental.Infrastructure.MySQL
 {
     public sealed class EfDbContext : DbContext, IUnitOfWork
     {
-        public EfDbContext() { }
+        private readonly string _connectionString;
+
+        public EfDbContext()
+        {
+            _connectionString = Environment.GetEnvironmentVariable("TCC_CONNECTION_STRING") ?? "";
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = Environment.GetEnvironmentVariable("TCC_CONNECTION_STRING");
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            optionsBuilder.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString));
         }
 
         public DbSet<Ato> Atos { get; set; }
@@ -85,9 +90,30 @@ namespace PortalLegisAmbiental.Infrastructure
                 .UsingEntity<GrupoPermissao>();
         }
 
+        public IDbConnection CreateDbConnection()
+        {
+            return new MySqlConnection(_connectionString);
+        }
+
+        public IDbConnection GetCurrentConnectionOpenState()
+        {
+            var currentConnection = Database.GetDbConnection();
+
+            if (currentConnection.State != ConnectionState.Open) currentConnection.Open();
+
+            return currentConnection;
+        }
+
+        public IDbConnection GetCurrentConnection()
+        {
+            var currentConnection = Database.GetDbConnection();
+
+            return currentConnection;
+        }
+
         public IDbContextTransaction _currentTransaction => Database.CurrentTransaction;
 
-        private DbTransaction _transaction;
+        private DbTransaction _transaction = null!;
 
         public IEfDbTransaction BeginOrGetCurrentTransaction()
         {

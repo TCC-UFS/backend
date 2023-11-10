@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using PortalLegisAmbiental.Domain.Seedwork;
 
-namespace PortalLegisAmbiental.Infrastructure
+namespace PortalLegisAmbiental.Infrastructure.MySQL
 {
     public sealed class DbTransaction : IEfDbTransaction
     {
