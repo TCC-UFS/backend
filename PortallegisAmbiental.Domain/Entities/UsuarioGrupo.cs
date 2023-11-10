@@ -6,5 +6,11 @@
         public ulong UsuarioId { get; set; }
         public virtual Grupo Grupo { get; set; } = null!;
         public virtual Usuario Usuario { get; set; } = null!;
+
+        public UsuarioGrupo(ulong grupoId, ulong usuarioId)
+        {
+            GrupoId = grupoId;
+            UsuarioId = usuarioId;
+        }
     }
 }

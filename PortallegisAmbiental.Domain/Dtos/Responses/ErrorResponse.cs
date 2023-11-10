@@ -2,10 +2,10 @@
 {
     public class ErrorResponse
     {
-        public string Code { get; private set; }
-        public string Instance { get; private set; }
-        public List<string> Errors { get; private set; }
-        public string? Exception { get; private set; }
+        public string Code { get; set; } = null!;
+        public string Instance { get; set; }
+        public List<string> Errors { get; set; }
+        public string? Exception { get; set; }
 
         public ErrorResponse(string instance, List<string> errors, string? exception)
         {
