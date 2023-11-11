@@ -1,12 +1,16 @@
-﻿using PortalLegisAmbiental.Infrastructure.MySQL;
+﻿using PortalLegisAmbiental.Domain.IRepositories;
+using PortalLegisAmbiental.Infrastructure.MySQL;
+using PortalLegisAmbiental.Infrastructure.MySQL.Repositories;
 
 namespace PortalLegisAmbiental.API.DependencyInjection
 {
     internal static class Infrastructure
     {
-        public static void AddRepositories(this IServiceCollection services)
+        internal static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<EfDbContext>();
+
+            services.AddScoped<ITipoAtoRepository, TipoAtoRepository>();
         }
     }
 }

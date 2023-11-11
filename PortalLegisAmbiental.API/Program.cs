@@ -75,6 +75,8 @@ builder.Services.AddVersionedApiExplorer(p =>
 });
 
 // Aplication Injections
+builder.Services.AddServices();
+builder.Services.AddValidators();
 builder.Services.AddRepositories();
 
 // Cors Configuration
