@@ -24,8 +24,15 @@ namespace PortalLegisAmbiental.API.Controllers
             return NoContent();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var response = await _tipoAtoService.GetAll();
+            return Ok(response);
+        }
+
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(ulong id)
+        public async Task<IActionResult> GetById(ulong id)
         {
             var response = await _tipoAtoService.GetById(id);
             return Ok(response);

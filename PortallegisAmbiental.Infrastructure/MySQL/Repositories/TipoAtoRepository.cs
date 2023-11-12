@@ -20,6 +20,13 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             await _dbContext.AddAsync(tipoAto);
         }
 
+        public async Task<List<TipoAto>> GetAll()
+        {
+            return await _dbContext.TiposAtos
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<TipoAto?> GetById(ulong id, bool noTracking = false)
         {
             if (noTracking)

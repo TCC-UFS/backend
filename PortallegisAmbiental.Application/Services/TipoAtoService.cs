@@ -42,6 +42,12 @@ namespace PortalLegisAmbiental.Application.Services
             _tipoAtoRepository.UnitOfWork.SaveChanges();
         }
 
+        public async Task<List<TipoAtoResponse>> GetAll()
+        {
+            var tiposAtos = await _tipoAtoRepository.GetAll();
+            return _mapper.Map<List<TipoAtoResponse>>(tiposAtos);
+        }
+
         public async Task<List<TipoAtoResponse>> SearchByName(string? name)
         {
             if (name == null) name = string.Empty;
