@@ -44,6 +44,12 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     .ToListAsync();
         }
 
+        public async Task<bool> Exists(TipoAto tipoAto)
+        {
+            return await _dbContext.TiposAtos
+                .CountAsync(tipo => tipo.Nome.Equals(tipoAto.Nome) && tipoAto.IsActive) > 0;
+        }
+
         public async Task Disable(TipoAto tipoAto)
         {
             tipoAto.Disable();

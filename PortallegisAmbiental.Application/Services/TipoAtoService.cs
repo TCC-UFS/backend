@@ -6,6 +6,7 @@ using PortalLegisAmbiental.Domain.Dtos.Responses;
 using PortalLegisAmbiental.Domain.Entities;
 using PortalLegisAmbiental.Domain.Exceptions;
 using PortalLegisAmbiental.Domain.IRepositories;
+using System.Net;
 
 namespace PortalLegisAmbiental.Application.Services
 {
@@ -30,6 +31,13 @@ namespace PortalLegisAmbiental.Application.Services
             _addValidator.ValidateAndThrow(tipoAtoRequest);
 
             var tipoAto = _mapper.Map<TipoAto>(tipoAtoRequest);
+            var exists = await _tipoAtoRepository.Exists(tipoAto);
+
+            if (exists)
+                throw new PortalLegisDomainException(
+                    "ALREADY_REGISTRED", "Tipo de Ato já cadastrado.",
+                    HttpStatusCode.Conflict);
+
             await _tipoAtoRepository.Add(tipoAto);
             _tipoAtoRepository.UnitOfWork.SaveChanges();
         }
@@ -58,9 +66,18 @@ namespace PortalLegisAmbiental.Application.Services
             var tipoAto = await _tipoAtoRepository.GetById(tipoAtoRequest.Id);
 
             if (tipoAto == null)
-                throw new PortalLegisDomainException("KEY_NOT_FOUND", "Id não encontrado.", System.Net.HttpStatusCode.NotFound);
+                throw new PortalLegisDomainException(
+                    "KEY_NOT_FOUND", "Id não encontrado.",
+                    HttpStatusCode.NotFound);
 
             tipoAto.UpdateName(tipoAtoRequest.Nome);
+            
+            var exists = await _tipoAtoRepository.Exists(tipoAto);
+            if (exists)
+                throw new PortalLegisDomainException(
+                    "ALREADY_REGISTRED", "Tipo de Ato já cadastrado.",
+                    HttpStatusCode.Conflict);
+
             _tipoAtoRepository.UnitOfWork.SaveChanges();
         }
 
@@ -69,7 +86,9 @@ namespace PortalLegisAmbiental.Application.Services
             var tipoAto = await _tipoAtoRepository.GetById(id);
 
             if (tipoAto == null)
-                throw new PortalLegisDomainException("KEY_NOT_FOUND", "Id não encontrado.", System.Net.HttpStatusCode.NotFound);
+                throw new PortalLegisDomainException(
+                    "KEY_NOT_FOUND", "Id não encontrado.",
+                    HttpStatusCode.NotFound);
 
             tipoAto.Disable();
             _tipoAtoRepository.UnitOfWork.SaveChanges();
