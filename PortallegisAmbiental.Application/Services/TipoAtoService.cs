@@ -54,7 +54,9 @@ namespace PortalLegisAmbiental.Application.Services
             var tipoAto = await _tipoAtoRepository.GetById(id, true);
             
             if (tipoAto == null)
-                throw new PortalLegisDomainException("KEY_NOT_FOUND", "Id não encontrado.", System.Net.HttpStatusCode.NotFound);
+                throw new PortalLegisDomainException(
+                    "KEY_NOT_FOUND", "Id não encontrado.",
+                    HttpStatusCode.NotFound);
 
             return _mapper.Map<TipoAtoResponse>(tipoAto);
         }
