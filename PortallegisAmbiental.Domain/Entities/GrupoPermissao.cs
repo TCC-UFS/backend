@@ -12,5 +12,9 @@
             GrupoId = grupoId;
             PermissaoId = permissaoId;
         }
+
+        public GrupoPermissao()
+        {
+        }
     }
 }

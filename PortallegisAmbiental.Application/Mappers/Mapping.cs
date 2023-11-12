@@ -17,6 +17,9 @@ namespace PortalLegisAmbiental.Application.Mappers
 
             CreateMap<AddJurisdicaoRequest, Jurisdicao>();
             CreateMap<Jurisdicao, JurisdicaoResponse>();
+
+            CreateMap<AddGrupoRequest, Grupo>();
+            CreateMap<Grupo, GrupoResponse>();
         }
     }
 }

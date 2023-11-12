@@ -40,14 +40,21 @@
             return Usuarios.Remove(usuario);
         }
 
+        public bool HasPermission(Permissao permissao)
+        {
+            return Permissoes.Find(perm => perm.Id.Equals(permissao.Id)) != null;
+        }
+
         public void AddPermission(Permissao permissao)
         {
             Permissoes.Add(permissao);
         }
 
-        public bool RemovePermission(Permissao permissao)
+        public void RemovePermission(Permissao permissao)
         {
-            return Permissoes.Remove(permissao);
+            var permissionIndex = Permissoes.FindIndex(perm => perm.Id.Equals(permissao.Id));
+            if (permissionIndex > -1)
+                Permissoes.RemoveAt(permissionIndex);
         }
 
         public void Disable()

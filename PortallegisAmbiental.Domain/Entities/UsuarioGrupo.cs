@@ -12,5 +12,9 @@
             GrupoId = grupoId;
             UsuarioId = usuarioId;
         }
+
+        public UsuarioGrupo()
+        {
+        }
     }
 }

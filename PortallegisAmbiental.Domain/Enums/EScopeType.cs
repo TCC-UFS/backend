@@ -2,6 +2,7 @@
 {
     public enum EScopeType
     {
+        All,
         Read,
         Write,
         Delete
