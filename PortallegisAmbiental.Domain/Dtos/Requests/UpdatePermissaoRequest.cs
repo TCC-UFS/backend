@@ -2,10 +2,11 @@
 
 namespace PortalLegisAmbiental.Domain.Dtos.Requests
 {
-    public class UpdateTipoAtoRequest
+    public class UpdatePermissaoRequest
     {
         [JsonIgnore]
         public ulong Id { get; set; }
-        public string? Nome { get; set; }
+        public string? Recurso { get; set; }
+        public string? Scope { get; set; }
     }
 }

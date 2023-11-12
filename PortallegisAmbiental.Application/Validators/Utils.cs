@@ -12,5 +12,11 @@ namespace PortalLegisAmbiental.Application.Validators
 
             return true;
         }
+
+        internal static bool VerifyEnum<T>(string? enumValue) where T : Enum
+        {
+            if (string.IsNullOrEmpty(enumValue)) return true;
+            return Enum.TryParse(typeof(T), enumValue, true, out _);
+        }
     }
 }
