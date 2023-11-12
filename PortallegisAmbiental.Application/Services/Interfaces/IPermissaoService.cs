@@ -9,6 +9,7 @@ namespace PortalLegisAmbiental.Application.Services.Interfaces
         Task<List<PermissaoResponse>> SearchByResource(string? recurso);
         Task<List<PermissaoResponse>> SearchByScope(string scope);
         Task<PermissaoResponse> GetById(ulong id);
+        Task<List<PermissaoResponse>> GetAll();
         Task Update(UpdatePermissaoRequest permissaoRequest);
         Task Disable(ulong id);
     }

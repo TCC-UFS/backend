@@ -43,6 +43,12 @@ namespace PortalLegisAmbiental.Application.Services
             _permissaoRepository.UnitOfWork.SaveChanges();
         }
 
+        public async Task<List<PermissaoResponse>> GetAll()
+        {
+            var permissoes = await _permissaoRepository.GetAll();
+            return _mapper.Map<List<PermissaoResponse>>(permissoes);
+        }
+
         public async Task<List<PermissaoResponse>> SearchByResource(string? recurso)
         {
             if (recurso == null) recurso = string.Empty;
@@ -82,6 +88,12 @@ namespace PortalLegisAmbiental.Application.Services
                 throw new PortalLegisDomainException(
                     "KEY_NOT_FOUND", "Id não encontrado.",
                     HttpStatusCode.NotFound);
+
+            if (!string.IsNullOrEmpty(permissaoRequest.Scope))
+            {
+                var scope = Enum.Parse<EScopeType>(permissaoRequest.Scope);
+                permissao.UpdateScope(scope);
+            }
 
             permissao.UpdateResource(permissaoRequest.Recurso);
             

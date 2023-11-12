@@ -21,6 +21,13 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             await _dbContext.AddAsync(permissao);
         }
 
+        public async Task<List<Permissao>> GetAll()
+        {
+            return await _dbContext.Permissoes
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<Permissao?> GetById(ulong id, bool noTracking = false)
         {
             if (noTracking)
