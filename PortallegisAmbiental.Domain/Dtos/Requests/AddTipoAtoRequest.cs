@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace PortalLegisAmbiental.Domain.Dtos.Requests
+﻿namespace PortalLegisAmbiental.Domain.Dtos.Requests
 {
     public class AddTipoAtoRequest
     {
