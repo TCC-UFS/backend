@@ -14,11 +14,11 @@ namespace PortalLegisAmbiental.Application.Services
     {
         private readonly ITipoAtoRepository _tipoAtoRepository;
         private readonly IValidator<AddTipoAtoRequest> _addValidator;
-        private readonly IValidator<TipoAtoRequest> _updateValidator;
+        private readonly IValidator<UpdateTipoAtoRequest> _updateValidator;
         private readonly IMapper _mapper;
 
         public TipoAtoService(ITipoAtoRepository tipoAtoRepository, IMapper mapper, 
-            IValidator<AddTipoAtoRequest> addValidator, IValidator<TipoAtoRequest> updateValidator)
+            IValidator<AddTipoAtoRequest> addValidator, IValidator<UpdateTipoAtoRequest> updateValidator)
         {
             _tipoAtoRepository = tipoAtoRepository;
             _mapper = mapper;
@@ -61,7 +61,7 @@ namespace PortalLegisAmbiental.Application.Services
             return _mapper.Map<TipoAtoResponse>(tipoAto);
         }
 
-        public async Task Update(TipoAtoRequest tipoAtoRequest)
+        public async Task Update(UpdateTipoAtoRequest tipoAtoRequest)
         {
             _updateValidator.ValidateAndThrow(tipoAtoRequest);
 
@@ -92,7 +92,7 @@ namespace PortalLegisAmbiental.Application.Services
                     "KEY_NOT_FOUND", "Id não encontrado.",
                     HttpStatusCode.NotFound);
 
-            tipoAto.Disable();
+            await _tipoAtoRepository.Disable(tipoAto);
             _tipoAtoRepository.UnitOfWork.SaveChanges();
         }
     }

@@ -14,7 +14,7 @@ namespace PortalLegisAmbiental.Application.Validators
         }
     }
 
-    public class UpdateTipoAtoValidator : AbstractValidator<TipoAtoRequest>
+    public class UpdateTipoAtoValidator : AbstractValidator<UpdateTipoAtoRequest>
     {
         public UpdateTipoAtoValidator()
         {

@@ -39,7 +39,7 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpPatch("update/{id}")]
-        public async Task<IActionResult> Update(ulong id, TipoAtoRequest request)
+        public async Task<IActionResult> Update(ulong id, UpdateTipoAtoRequest request)
         {
             request.Id = id;
             await _tipoAtoService.Update(request);

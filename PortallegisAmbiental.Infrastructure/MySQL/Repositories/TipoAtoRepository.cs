@@ -56,8 +56,6 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             await _dbContext.Atos
                 .Where(ato => ato.TipoAtoId.Equals(tipoAto.Id) && ato.IsActive)
                 .ForEachAsync(ato => ato.Disable());
-
-            UnitOfWork.SaveChanges();
         }
     }
 }

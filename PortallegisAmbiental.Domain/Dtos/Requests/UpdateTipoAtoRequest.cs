@@ -2,7 +2,7 @@
 
 namespace PortalLegisAmbiental.Domain.Dtos.Requests
 {
-    public class TipoAtoRequest
+    public class UpdateTipoAtoRequest
     {
         [JsonIgnore]
         public ulong Id { get; set; }

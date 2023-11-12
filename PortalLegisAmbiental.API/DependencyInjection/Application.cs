@@ -18,7 +18,7 @@ namespace PortalLegisAmbiental.API.DependencyInjection
         internal static void AddValidators(this IServiceCollection services)
         {
             services.AddScoped<IValidator<AddTipoAtoRequest>, AddTipoAtoValidator>();
-            services.AddScoped<IValidator<TipoAtoRequest>, UpdateTipoAtoValidator>();
+            services.AddScoped<IValidator<UpdateTipoAtoRequest>, UpdateTipoAtoValidator>();
         }
     }
 }

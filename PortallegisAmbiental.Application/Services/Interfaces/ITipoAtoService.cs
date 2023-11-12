@@ -8,7 +8,7 @@ namespace PortalLegisAmbiental.Application.Services.Interfaces
         Task Add(AddTipoAtoRequest tipoAtoRequest);
         Task<List<TipoAtoResponse>> SearchByName(string? name);
         Task<TipoAtoResponse> GetById(ulong id);
-        Task Update(TipoAtoRequest tipoAtoRequest);
+        Task Update(UpdateTipoAtoRequest tipoAtoRequest);
         Task Disable(ulong id);
     }
 }
