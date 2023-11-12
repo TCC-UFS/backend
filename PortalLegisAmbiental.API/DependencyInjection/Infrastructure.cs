@@ -11,6 +11,7 @@ namespace PortalLegisAmbiental.API.DependencyInjection
             services.AddScoped<EfDbContext>();
 
             services.AddScoped<ITipoAtoRepository, TipoAtoRepository>();
+            services.AddScoped<IPermissaoRepository, PermissaoRepository>();
         }
     }
 }
