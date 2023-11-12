@@ -20,16 +20,24 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             await _dbContext.AddAsync(grupo);
         }
 
+        public async Task<Grupo> AddAndReturn(Grupo grupo)
+        {
+            var added = await _dbContext.AddAsync(grupo);
+            return added.Entity;
+        }
+
         public async Task<List<Grupo>> GetAll(bool includePermissions = false)
         {
             if (includePermissions) 
                 return await _dbContext.Grupos
                     .AsNoTracking()
                     .Include(grupo => grupo.Permissoes)
+                    .Where(grupo => grupo.IsActive)
                     .ToListAsync();
             else
                 return await _dbContext.Grupos
                     .AsNoTracking()
+                    .Where(grupo => grupo.IsActive)
                     .ToListAsync();
         }
 
@@ -57,6 +65,17 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     return await _dbContext.Grupos
                         .FirstOrDefaultAsync(grupo => grupo.Id.Equals(id) && grupo.IsActive);
             }
+        }
+
+        public async Task<Grupo?> GetByName(string name, bool noTracking = false)
+        {
+            if (noTracking)
+                return await _dbContext.Grupos
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(grupo => grupo.Nome.ToLower().Equals(name.ToLower()) && grupo.IsActive);
+            else
+                return await _dbContext.Grupos
+                    .FirstOrDefaultAsync(grupo => grupo.Nome.ToLower().Equals(name.ToLower()) && grupo.IsActive);
         }
 
         public async Task<List<Grupo>> SearchByName(string name, bool noTracking = false, bool includePermissions = false)
@@ -93,7 +112,7 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
         {
             return await _dbContext.Grupos
                 .CountAsync(group =>
-                    group.Nome.Equals(grupo.Nome)
+                    group.Nome.ToLower().Equals(grupo.Nome.ToLower())
                     && grupo.IsActive) > 0;
         }
 
