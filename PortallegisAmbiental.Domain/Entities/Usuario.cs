@@ -54,14 +54,21 @@ namespace PortalLegisAmbiental.Domain.Entities
             }
         }
 
+        public bool HasGroup(Grupo grupo)
+        {
+            return Grupos.Find(group => group.Id.Equals(grupo.Id)) != null;
+        }
+
         public void AddGroup(Grupo grupo)
         {
             Grupos.Add(grupo);
         }
 
-        public bool RemoveGroup(Grupo grupo)
+        public void RemoveGroup(Grupo grupo)
         {
-            return Grupos.Remove(grupo);
+            var groupIndex = Grupos.FindIndex(group => group.Id.Equals(grupo.Id));
+            if (groupIndex > -1)
+                Grupos.RemoveAt(groupIndex);
         }
 
         public void Disable()

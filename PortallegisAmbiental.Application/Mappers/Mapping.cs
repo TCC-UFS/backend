@@ -20,6 +20,9 @@ namespace PortalLegisAmbiental.Application.Mappers
 
             CreateMap<AddGrupoRequest, Grupo>();
             CreateMap<Grupo, GrupoResponse>();
+
+            CreateMap<AddUsuarioRequest, Usuario>();
+            CreateMap<Usuario, UsuarioResponse>();
         }
     }
 }

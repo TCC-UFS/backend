@@ -4,8 +4,9 @@ namespace PortalLegisAmbiental.Application.Validators
 {
     internal static class Utils
     {
-        internal static bool IsEmail(string email)
+        internal static bool IsEmail(string? email)
         {
+            if (string.IsNullOrEmpty(email)) return true;
             var emailRx = new Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
             if (!emailRx.IsMatch(email))
                 return false;
