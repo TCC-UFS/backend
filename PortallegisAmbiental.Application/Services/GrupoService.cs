@@ -22,7 +22,7 @@ namespace PortalLegisAmbiental.Application.Services
 
         public GrupoService(IGrupoRepository grupoRepository, IPermissaoRepository permissaoRepository, IMapper mapper,
             IValidator<AddGrupoRequest> addValidator, IValidator<UpdateGrupoRequest> updateValidator,
-            IValidator<AddPermissaoRequest> addPermValidator, IValidator<UpdatePermissaoRequest> updatePermValidator)
+            IValidator<AddPermissaoRequest> addPermValidator)
         {
             _grupoRepository = grupoRepository;
             _permissaoRepository = permissaoRepository;
