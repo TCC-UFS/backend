@@ -31,6 +31,7 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
         {
             return await _dbContext.Permissoes
                 .AsNoTracking()
+                .Where(permissao => permissao.IsActive)
                 .ToListAsync();
         }
 

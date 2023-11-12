@@ -24,6 +24,7 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
         {
             return await _dbContext.TiposAtos
                 .AsNoTracking()
+                .Where(tipoAto => tipoAto.IsActive)
                 .ToListAsync();
         }
 

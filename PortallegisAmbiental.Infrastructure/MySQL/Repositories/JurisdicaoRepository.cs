@@ -73,6 +73,7 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
         {
             return await _dbContext.Jurisdicoes
                 .AsNoTracking()
+                .Where(jurisdicao => jurisdicao.IsActive)
                 .ToListAsync();
         }
 
