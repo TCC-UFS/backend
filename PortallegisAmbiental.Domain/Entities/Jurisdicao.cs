@@ -1,10 +1,12 @@
 ﻿using PortalLegisAmbiental.Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace PortalLegisAmbiental.Domain.Entities
 {
     public class Jurisdicao
     {
         public ulong Id { get; private set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public EAmbitoType Ambito { get; private set; }
         public string Sigla { get; private set; }
         public string? Estado { get; private set; }

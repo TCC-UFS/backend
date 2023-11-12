@@ -12,6 +12,7 @@ namespace PortalLegisAmbiental.API.DependencyInjection
 
             services.AddScoped<ITipoAtoRepository, TipoAtoRepository>();
             services.AddScoped<IPermissaoRepository, PermissaoRepository>();
+            services.AddScoped<IJurisdicaoRepository, JurisdicaoRepository>();
         }
     }
 }

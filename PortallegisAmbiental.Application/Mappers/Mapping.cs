@@ -14,6 +14,9 @@ namespace PortalLegisAmbiental.Application.Mappers
 
             CreateMap<AddPermissaoRequest, Permissao>();
             CreateMap<Permissao, PermissaoResponse>();
+
+            CreateMap<AddJurisdicaoRequest, Jurisdicao>();
+            CreateMap<Jurisdicao, JurisdicaoResponse>();
         }
     }
 }

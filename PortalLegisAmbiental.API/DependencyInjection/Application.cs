@@ -14,6 +14,7 @@ namespace PortalLegisAmbiental.API.DependencyInjection
 
             services.AddScoped<ITipoAtoService, TipoAtoService>();
             services.AddScoped<IPermissaoService, PermissaoService>();
+            services.AddScoped<IJurisdicaoService, JurisdicaoService>();
         }
 
         internal static void AddValidators(this IServiceCollection services)
@@ -23,6 +24,9 @@ namespace PortalLegisAmbiental.API.DependencyInjection
 
             services.AddScoped<IValidator<AddPermissaoRequest>, AddPermissaoValidator>();
             services.AddScoped<IValidator<UpdatePermissaoRequest>, UpdatePermissaoValidator>();
+
+            services.AddScoped<IValidator<AddJurisdicaoRequest>, AddJurisdicaoValidator>();
+            services.AddScoped<IValidator<UpdateJurisdicaoRequest>, UpdateJurisdicaoValidator>();
         }
     }
 }
