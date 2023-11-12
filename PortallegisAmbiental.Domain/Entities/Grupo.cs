@@ -21,10 +21,13 @@
             UpdatedAt = null;
         }
 
-        public void UpdateName(string nome)
+        public void UpdateName(string? nome)
         {
-            Nome = nome;
-            UpdatedAt = DateTime.Now;
+            if (!string.IsNullOrEmpty(nome))
+            {
+                Nome = nome;
+                UpdatedAt = DateTime.Now;
+            }
         }
 
         public void AddUser(Usuario usuario)

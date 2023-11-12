@@ -20,9 +20,10 @@
             IsActive = true;
         }
 
-        public void UpdateFilePath(string caminhoArquivo)
+        public void UpdateFilePath(string? caminhoArquivo)
         {
-            CaminhoArquivo = caminhoArquivo;
+            if (!string.IsNullOrEmpty(caminhoArquivo))
+                CaminhoArquivo = caminhoArquivo;
         }
 
         public void HasContent()

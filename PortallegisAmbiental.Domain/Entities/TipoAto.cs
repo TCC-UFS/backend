@@ -12,9 +12,10 @@
             IsActive = true;
         }
 
-        public void UpdateName(string nome)
+        public void UpdateName(string? nome)
         {
-            Nome = nome;
+            if (!string.IsNullOrEmpty(nome))
+                Nome = nome;
         }
 
         public void Disable()

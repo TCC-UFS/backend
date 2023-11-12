@@ -37,28 +37,40 @@
             UpdatedAt = null;
         }
 
-        public void UpdateNumber(string numero)
+        public void UpdateNumber(string? numero)
         {
-            Numero = numero;
-            UpdatedAt = DateTime.Now;
+            if (!string.IsNullOrEmpty(numero))
+            {
+                Numero = numero;
+                UpdatedAt = DateTime.Now;
+            }
         }
 
-        public void UpdateEmenta(string ementa)
+        public void UpdateEmenta(string? ementa)
         {
-            Ementa = ementa;
-            UpdatedAt = DateTime.Now;
+            if (!string.IsNullOrEmpty(ementa))
+            {
+                Ementa = ementa;
+                UpdatedAt = DateTime.Now;
+            }
         }
 
-        public void UpdatePublishDate(DateTime dataPublicacao)
+        public void UpdatePublishDate(DateTime? dataPublicacao)
         {
-            DataPublicacao = dataPublicacao;
-            UpdatedAt = DateTime.Now;
+            if (dataPublicacao.HasValue)
+            {
+                DataPublicacao = dataPublicacao.Value;
+                UpdatedAt = DateTime.Now;
+            }
         }
 
-        public void UpdateDate(DateTime dataAto)
+        public void UpdateDate(DateTime? dataAto)
         {
-            DataAto = dataAto;
-            UpdatedAt = DateTime.Now;
+            if (dataAto.HasValue)
+            {
+                DataAto = dataAto.Value;
+                UpdatedAt = DateTime.Now;
+            }
         }
 
         public void Publish()

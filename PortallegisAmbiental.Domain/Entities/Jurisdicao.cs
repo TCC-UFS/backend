@@ -21,19 +21,22 @@ namespace PortalLegisAmbiental.Domain.Entities
             IsActive = true;
         }
 
-        public void UpdateAmbito(EAmbitoType ambito)
+        public void UpdateAmbito(EAmbitoType? ambito)
         {
-            Ambito = ambito;
+            if (ambito.HasValue)
+                Ambito = ambito.Value;
         }
 
-        public void UpdateSigla(string sigla)
+        public void UpdateSigla(string? sigla)
         {
-            Sigla = sigla;
+            if (!string.IsNullOrEmpty(sigla))
+                Sigla = sigla;
         }
 
-        public void UpdateState(string estado)
+        public void UpdateState(string? estado)
         {
-            Estado = estado;
+            if (!string.IsNullOrEmpty(estado))
+                Estado = estado;
         }
 
         public void Disable()

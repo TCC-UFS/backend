@@ -27,22 +27,31 @@ namespace PortalLegisAmbiental.Domain.Entities
             IsActive = true;
         }
 
-        public void UpdateName(string nome)
+        public void UpdateName(string? nome)
         {
-            Nome = nome;
-            UpdatedAt = DateTime.Now;
+            if (!string.IsNullOrWhiteSpace(nome))
+            {
+                Nome = nome;
+                UpdatedAt = DateTime.Now;
+            }
         }
 
-        public void UpdateEmail(string email)
+        public void UpdateEmail(string? email)
         {
-            Email = email;
-            UpdatedAt = DateTime.Now;
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                Email = email;
+                UpdatedAt = DateTime.Now;
+            }
         }
 
-        public void UpdatePassword(string senha)
+        public void UpdatePassword(string? senha)
         {
-            Senha = BC.HashPassword(senha, BC.GenerateSalt(10));
-            UpdatedAt = DateTime.Now;
+            if (!string.IsNullOrEmpty(senha))
+            {
+                Senha = BC.HashPassword(senha, BC.GenerateSalt(10));
+                UpdatedAt = DateTime.Now;
+            }
         }
 
         public void AddGroup(Grupo grupo)

@@ -18,14 +18,16 @@ namespace PortalLegisAmbiental.Domain.Entities
             IsActive = true;
         }
 
-        public void UpdateScope(EScopeType scope)
+        public void UpdateScope(EScopeType? scope)
         {
-            Scope = scope;
+            if (scope.HasValue)
+                Scope = scope.Value;
         }
 
-        public void UpdateResource(string recurso)
+        public void UpdateResource(string? recurso)
         {
-            Recurso = recurso;
+            if (!string.IsNullOrEmpty(recurso))
+                Recurso = recurso;
         }
 
         public void AddGroup(Grupo grupo)
