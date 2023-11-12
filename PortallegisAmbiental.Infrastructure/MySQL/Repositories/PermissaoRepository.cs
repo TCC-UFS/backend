@@ -21,6 +21,12 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             await _dbContext.AddAsync(permissao);
         }
 
+        public async Task<Permissao> AddAndReturn(Permissao permissao)
+        {
+            var perm = await _dbContext.AddAsync(permissao);
+            return perm.Entity;
+        }
+
         public async Task<List<Permissao>> GetAll()
         {
             return await _dbContext.Permissoes
@@ -37,6 +43,23 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             else
                 return await _dbContext.Permissoes
                     .FirstOrDefaultAsync(permissao => permissao.Id.Equals(id) && permissao.IsActive);
+        }
+
+        public async Task<Permissao?> GetByResourceAndScope(string recurso, EScopeType scope, bool noTracking = false)
+        {
+            if (noTracking)
+                return await _dbContext.Permissoes
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(permissao =>
+                        permissao.Recurso.Equals(recurso)
+                        && permissao.Scope.Equals(scope)
+                        && permissao.IsActive);
+            else
+                return await _dbContext.Permissoes
+                    .FirstOrDefaultAsync(permissao =>
+                        permissao.Recurso.Equals(recurso)
+                        && permissao.Scope.Equals(scope)
+                        && permissao.IsActive);
         }
 
         public async Task<List<Permissao>> SearchByResource(string recurso, bool noTracking = false)

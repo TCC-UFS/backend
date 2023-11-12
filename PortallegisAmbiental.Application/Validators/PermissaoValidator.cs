@@ -10,7 +10,7 @@ namespace PortalLegisAmbiental.Application.Validators
         {
             RuleFor(permissao => permissao.Recurso)
                 .NotEmpty()
-                .MinimumLength(4)
+                .MinimumLength(3)
                 .MaximumLength(50);
 
             RuleFor(permissao => permissao.Scope)
@@ -24,7 +24,7 @@ namespace PortalLegisAmbiental.Application.Validators
         public UpdatePermissaoValidator()
         {
             RuleFor(permissao => permissao.Recurso)
-                .MinimumLength(4)
+                .MinimumLength(3)
                 .MaximumLength(40);
 
             RuleFor(permissao => permissao.Scope)

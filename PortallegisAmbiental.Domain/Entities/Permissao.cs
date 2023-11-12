@@ -16,7 +16,7 @@ namespace PortalLegisAmbiental.Domain.Entities
         public Permissao(EScopeType scope, string recurso)
         {
             Scope = scope;
-            Recurso = recurso;
+            Recurso = recurso.ToLower();
             IsActive = true;
         }
 
