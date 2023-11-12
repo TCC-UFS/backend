@@ -1,10 +1,12 @@
 ﻿using PortalLegisAmbiental.Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace PortalLegisAmbiental.Domain.Entities
 {
     public class Permissao
     {
         public ulong Id { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public EScopeType Scope { get; set; }
         public string Recurso { get; set; }
         public bool IsActive { get; set; }
