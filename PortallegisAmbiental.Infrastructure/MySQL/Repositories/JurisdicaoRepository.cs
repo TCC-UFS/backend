@@ -85,7 +85,15 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     && (jur.Estado == null || (jur.Estado != null
                         && jur.Estado.Equals(jurisdicao.Estado)))
                     && jur.Sigla.Equals(jurisdicao.Sigla)
-                    && jurisdicao.IsActive) > 0;
+                    && jur.IsActive) > 0;
+        }
+
+        public async Task<bool> Exists(ulong jurisdicaoId)
+        {
+            return await _dbContext.Jurisdicoes
+                .CountAsync(jur =>
+                    jur.Id.Equals(jurisdicaoId)
+                    && jur.IsActive) > 0;
         }
 
         public async Task Disable(Jurisdicao jurisdicao)

@@ -152,5 +152,11 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             return await _dbContext.Usuarios
                 .CountAsync(user => user.Email.Equals(usuario.Email) && user.IsActive) > 0;
         }
+
+        public async Task<bool> Exists(ulong usuarioId)
+        {
+            return await _dbContext.Usuarios
+                .CountAsync(user => user.Id.Equals(usuarioId) && user.IsActive) > 0;
+        }
     }
 }

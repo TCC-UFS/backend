@@ -12,6 +12,7 @@ namespace PortalLegisAmbiental.Domain.IRepositories
         Task<List<Jurisdicao>> SearchByAmbito(EAmbitoType ambito, bool noTracking = false);
         Task<List<Jurisdicao>> GetAll();
         Task<bool> Exists(Jurisdicao jurisdicao);
+        Task<bool> Exists(ulong jurisdicaoId);
         Task Disable(Jurisdicao jurisdicao);
     }
 }

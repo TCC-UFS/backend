@@ -9,6 +9,7 @@ namespace PortalLegisAmbiental.Domain.IRepositories
         Task<List<TipoAto>> GetAll();
         Task<List<TipoAto>> SearchByName(string name, bool noTracking = false);
         Task<bool> Exists(TipoAto tipoAto);
+        Task<bool> Exists(ulong tipoAtoId);
         Task Disable(TipoAto tipoAto);
     }
 }

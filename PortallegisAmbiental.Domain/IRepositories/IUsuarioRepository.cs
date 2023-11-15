@@ -11,5 +11,6 @@ namespace PortalLegisAmbiental.Domain.IRepositories
         Task<List<Usuario>> SearchByName(string name, bool noTracking = false, bool includeGroups = false);
         Task<List<Usuario>> SearchByEmail(string email, bool noTracking = false, bool includeGroups = false);
         Task<bool> Exists(Usuario usuario);
+        Task<bool> Exists(ulong usuarioId);
     }
 }
