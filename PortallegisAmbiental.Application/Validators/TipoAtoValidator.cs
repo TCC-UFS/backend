@@ -8,6 +8,7 @@ namespace PortalLegisAmbiental.Application.Validators
         public AddTipoAtoValidator()
         {
             RuleFor(tipoAto => tipoAto.Nome)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .MinimumLength(8)
                 .MaximumLength(32);
@@ -19,10 +20,12 @@ namespace PortalLegisAmbiental.Application.Validators
         public UpdateTipoAtoValidator()
         {
             RuleFor(tipoAto => tipoAto.Nome)
+                .Cascade(CascadeMode.Stop)
                 .MinimumLength(8)
                 .MaximumLength(32);
 
             RuleFor(tipoAto => tipoAto.Id)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty();
         }
     }

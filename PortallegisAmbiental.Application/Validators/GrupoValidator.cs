@@ -8,6 +8,7 @@ namespace PortalLegisAmbiental.Application.Validators
         public AddGrupoValidator()
         {
             RuleFor(grupo => grupo.Nome)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .MinimumLength(4)
                 .MaximumLength(20);
@@ -19,10 +20,12 @@ namespace PortalLegisAmbiental.Application.Validators
         public UpdateGrupoValidator()
         {
             RuleFor(grupo => grupo.Nome)
+                .Cascade(CascadeMode.Stop)
                 .MinimumLength(4)
                 .MaximumLength(20);
 
             RuleFor(grupo => grupo.Id)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty();
         }
     }
