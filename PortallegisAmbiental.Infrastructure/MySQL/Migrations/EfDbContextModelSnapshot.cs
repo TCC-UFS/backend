@@ -25,6 +25,9 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint unsigned");
 
+                    b.Property<string>("CaminhoArquivo")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -55,6 +58,12 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("PossuiConteudo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("PossuiHtml")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<ulong>("TipoAtoId")
                         .HasColumnType("bigint unsigned");
 
@@ -63,45 +72,13 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById")
-                        .IsUnique();
+                    b.HasIndex("CreatedById");
 
-                    b.HasIndex("JurisdicaoId")
-                        .IsUnique();
+                    b.HasIndex("JurisdicaoId");
 
-                    b.HasIndex("TipoAtoId")
-                        .IsUnique();
+                    b.HasIndex("TipoAtoId");
 
-                    b.ToTable("Atos");
-                });
-
-            modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.ConteudoAto", b =>
-                {
-                    b.Property<ulong>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint unsigned");
-
-                    b.Property<ulong>("AtoId")
-                        .HasColumnType("bigint unsigned");
-
-                    b.Property<string>("CaminhoArquivo")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("PossuiConteudo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("PossuiHtml")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AtoId")
-                        .IsUnique();
-
-                    b.ToTable("ConteudosAtos");
+                    b.ToTable("Atos", (string)null);
                 });
 
             modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.Grupo", b =>
@@ -125,7 +102,7 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Grupos");
+                    b.ToTable("Grupos", (string)null);
                 });
 
             modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.GrupoPermissao", b =>
@@ -140,7 +117,7 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
 
                     b.HasIndex("PermissaoId");
 
-                    b.ToTable("GrupoPermissao");
+                    b.ToTable("GrupoPermissao", (string)null);
                 });
 
             modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.Jurisdicao", b =>
@@ -165,7 +142,7 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Jurisdicoes");
+                    b.ToTable("Jurisdicoes", (string)null);
                 });
 
             modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.Permissao", b =>
@@ -187,7 +164,7 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissoes");
+                    b.ToTable("Permissoes", (string)null);
                 });
 
             modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.TipoAto", b =>
@@ -205,7 +182,7 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TiposAtos");
+                    b.ToTable("TiposAtos", (string)null);
                 });
 
             modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.Usuario", b =>
@@ -237,7 +214,7 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.UsuarioGrupo", b =>
@@ -252,26 +229,26 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("UsuarioGrupo");
+                    b.ToTable("UsuarioGrupo", (string)null);
                 });
 
             modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.Ato", b =>
                 {
                     b.HasOne("PortalLegisAmbiental.Domain.Entities.Usuario", "CreatedBy")
-                        .WithOne()
-                        .HasForeignKey("PortalLegisAmbiental.Domain.Entities.Ato", "CreatedById")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PortalLegisAmbiental.Domain.Entities.Jurisdicao", "Jurisdicao")
-                        .WithOne()
-                        .HasForeignKey("PortalLegisAmbiental.Domain.Entities.Ato", "JurisdicaoId")
+                        .WithMany()
+                        .HasForeignKey("JurisdicaoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PortalLegisAmbiental.Domain.Entities.TipoAto", "TipoAto")
-                        .WithOne()
-                        .HasForeignKey("PortalLegisAmbiental.Domain.Entities.Ato", "TipoAtoId")
+                        .WithMany()
+                        .HasForeignKey("TipoAtoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -280,15 +257,6 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
                     b.Navigation("Jurisdicao");
 
                     b.Navigation("TipoAto");
-                });
-
-            modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.ConteudoAto", b =>
-                {
-                    b.HasOne("PortalLegisAmbiental.Domain.Entities.Ato", null)
-                        .WithOne("ConteudoAto")
-                        .HasForeignKey("PortalLegisAmbiental.Domain.Entities.ConteudoAto", "AtoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.GrupoPermissao", b =>
@@ -327,12 +295,6 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
                     b.Navigation("Grupo");
 
                     b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.Ato", b =>
-                {
-                    b.Navigation("ConteudoAto")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("PortalLegisAmbiental.Domain.Entities.Grupo", b =>

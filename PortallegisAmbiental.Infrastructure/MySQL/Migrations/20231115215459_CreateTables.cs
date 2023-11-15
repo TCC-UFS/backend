@@ -23,6 +23,8 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nome = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
@@ -97,6 +99,8 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Senha = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
@@ -142,7 +146,13 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DataPublicacao = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DataAto = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CaminhoArquivo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PossuiConteudo = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    PossuiHtml = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Disponivel = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedById = table.Column<ulong>(type: "bigint unsigned", nullable: true),
                     JurisdicaoId = table.Column<ulong>(type: "bigint unsigned", nullable: false),
@@ -197,54 +207,20 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "ConteudosAtos",
-                columns: table => new
-                {
-                    Id = table.Column<ulong>(type: "bigint unsigned", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CaminhoArquivo = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PossuiConteudo = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    PossuiHtml = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    AtoId = table.Column<ulong>(type: "bigint unsigned", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ConteudosAtos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ConteudosAtos_Atos_AtoId",
-                        column: x => x.AtoId,
-                        principalTable: "Atos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateIndex(
                 name: "IX_Atos_CreatedById",
                 table: "Atos",
-                column: "CreatedById",
-                unique: true);
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Atos_JurisdicaoId",
                 table: "Atos",
-                column: "JurisdicaoId",
-                unique: true);
+                column: "JurisdicaoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Atos_TipoAtoId",
                 table: "Atos",
-                column: "TipoAtoId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ConteudosAtos_AtoId",
-                table: "ConteudosAtos",
-                column: "AtoId",
-                unique: true);
+                column: "TipoAtoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GrupoPermissao_PermissaoId",
@@ -261,7 +237,7 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ConteudosAtos");
+                name: "Atos");
 
             migrationBuilder.DropTable(
                 name: "GrupoPermissao");
@@ -270,19 +246,16 @@ namespace PortalLegisAmbiental.Infrastructure.Migrations
                 name: "UsuarioGrupo");
 
             migrationBuilder.DropTable(
-                name: "Atos");
+                name: "Jurisdicoes");
+
+            migrationBuilder.DropTable(
+                name: "TiposAtos");
 
             migrationBuilder.DropTable(
                 name: "Permissoes");
 
             migrationBuilder.DropTable(
                 name: "Grupos");
-
-            migrationBuilder.DropTable(
-                name: "Jurisdicoes");
-
-            migrationBuilder.DropTable(
-                name: "TiposAtos");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");
