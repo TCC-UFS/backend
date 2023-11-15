@@ -7,7 +7,7 @@ namespace PortalLegisAmbiental.Application.Validators
         internal static bool IsEmail(string? email)
         {
             if (string.IsNullOrEmpty(email)) return true;
-            var emailRx = new Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+            var emailRx = new Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,5}$");
             if (!emailRx.IsMatch(email))
                 return false;
 

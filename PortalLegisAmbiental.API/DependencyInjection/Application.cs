@@ -17,6 +17,7 @@ namespace PortalLegisAmbiental.API.DependencyInjection
             services.AddScoped<IJurisdicaoService, JurisdicaoService>();
             services.AddScoped<IGrupoService, GrupoService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<IAtoService, AtoService>();
         }
 
         internal static void AddValidators(this IServiceCollection services)
@@ -35,6 +36,9 @@ namespace PortalLegisAmbiental.API.DependencyInjection
 
             services.AddScoped<IValidator<AddUsuarioRequest>, AddUsuarioValidator>();
             services.AddScoped<IValidator<UpdateUsuarioRequest>, UpdateUsuarioValidator>();
+
+            services.AddScoped<IValidator<AddAtoRequest>, AddAtoValidator>();
+            services.AddScoped<IValidator<UpdateAtoRequest>, UpdateAtoValidator>();
         }
     }
 }

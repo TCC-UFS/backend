@@ -24,7 +24,6 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL
         }
 
         public DbSet<Ato> Atos { get; set; }
-        public DbSet<ConteudoAto> ConteudosAtos { get; set; }
         public DbSet<Grupo> Grupos { get; set; }
         public DbSet<Jurisdicao> Jurisdicoes { get; set; }
         public DbSet<Permissao> Permissoes { get; set; }
@@ -51,29 +50,22 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL
             modelBuilder
                 .Entity<Ato>()
                 .HasOne(a => a.Jurisdicao)
-                .WithOne()
-                .HasForeignKey<Ato>(a => a.JurisdicaoId)
-                .IsRequired();
-
-            modelBuilder
-                .Entity<Ato>()
-                .HasOne(a => a.ConteudoAto)
-                .WithOne()
-                .HasForeignKey<ConteudoAto>(a => a.AtoId)
+                .WithMany()
+                .HasForeignKey(a => a.JurisdicaoId)
                 .IsRequired();
 
             modelBuilder
                 .Entity<Ato>()
                 .HasOne(a => a.CreatedBy)
-                .WithOne()
-                .HasForeignKey<Ato>(a => a.CreatedById)
+                .WithMany()
+                .HasForeignKey(a => a.CreatedById)
                 .IsRequired();
 
             modelBuilder
                 .Entity<Ato>()
                 .HasOne(a => a.TipoAto)
-                .WithOne()
-                .HasForeignKey<Ato>(a => a.TipoAtoId)
+                .WithMany()
+                .HasForeignKey(a => a.TipoAtoId)
                 .IsRequired();
 
             // Many-to-Many relations

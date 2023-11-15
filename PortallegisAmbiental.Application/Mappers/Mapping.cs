@@ -23,6 +23,10 @@ namespace PortalLegisAmbiental.Application.Mappers
 
             CreateMap<AddUsuarioRequest, Usuario>();
             CreateMap<Usuario, UsuarioResponse>();
+
+            CreateMap<Ato, AtoResponse>();
+            CreateMap<AddAtoRequest, Ato>()
+                .ConstructUsing(atoRequest => new Ato(atoRequest));
         }
     }
 }
