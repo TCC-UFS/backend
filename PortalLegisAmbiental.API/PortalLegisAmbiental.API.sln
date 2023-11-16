@@ -5,11 +5,11 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalLegisAmbiental.API", "PortalLegisAmbiental.API.csproj", "{DFCF1847-BF3A-4923-AFAE-39165A5D4B3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalLegisAmbiental.Application", "..\PortallegisAmbiental.Application\PortalLegisAmbiental.Application.csproj", "{69E5B358-E38A-4D66-9219-14CF39DD85A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalLegisAmbiental.Application", "..\PortalLegisAmbiental.Application\PortalLegisAmbiental.Application.csproj", "{69E5B358-E38A-4D66-9219-14CF39DD85A9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalLegisAmbiental.Domain", "..\PortallegisAmbiental.Domain\PortalLegisAmbiental.Domain.csproj", "{5E4BF870-4128-445D-9F1C-3C675900A117}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalLegisAmbiental.Domain", "..\PortalLegisAmbiental.Domain\PortalLegisAmbiental.Domain.csproj", "{5E4BF870-4128-445D-9F1C-3C675900A117}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalLegisAmbiental.Infrastructure", "..\PortallegisAmbiental.Infrastructure\PortalLegisAmbiental.Infrastructure.csproj", "{BD30CD1A-94AC-49CF-8440-E00AE2E8DE2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalLegisAmbiental.Infrastructure", "..\PortalLegisAmbiental.Infrastructure\PortalLegisAmbiental.Infrastructure.csproj", "{BD30CD1A-94AC-49CF-8440-E00AE2E8DE2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
