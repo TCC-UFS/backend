@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PortallegisAmbiental.Domain\PortalLegisAmbiental.Domain.csproj" />
-    <ProjectReference Include="..\PortallegisAmbiental.Infrastructure\PortalLegisAmbiental.Infrastructure.csproj" />
+    <ProjectReference Include="..\PortalLegisAmbiental.Domain\PortalLegisAmbiental.Domain.csproj" />
+    <ProjectReference Include="..\PortalLegisAmbiental.Infrastructure\PortalLegisAmbiental.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
