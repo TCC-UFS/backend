@@ -13,7 +13,7 @@ namespace PortalLegisAmbiental.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok("I'm alive and runing 4. :)");
+            return Ok("I'm alive and runing 1. :)");
         }
     }
 }
