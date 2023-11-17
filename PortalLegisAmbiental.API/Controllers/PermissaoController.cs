@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PortalLegisAmbiental.API.Controllers.Base;
 using PortalLegisAmbiental.Application.Services.Interfaces;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
@@ -6,7 +7,7 @@ using PortalLegisAmbiental.Domain.Dtos.Requests;
 namespace PortalLegisAmbiental.API.Controllers
 {
     [ApiVersion("1")]
-    [ApiController]
+    [Authorize]
     [Route("api/v{version:apiVersion}/permissoes")]
     public class PermissaoController : BaseController
     {

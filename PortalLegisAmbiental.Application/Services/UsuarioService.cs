@@ -45,6 +45,28 @@ namespace PortalLegisAmbiental.Application.Services
             _usuarioRepository.UnitOfWork.SaveChanges();
         }
 
+        public async Task Register(AddUsuarioRequest usuarioRequest)
+        {
+            _addValidator.ValidateAndThrow(usuarioRequest);
+
+            var usuario = _mapper.Map<Usuario>(usuarioRequest);
+
+            var exists = await _usuarioRepository.Exists(usuario);
+            if (exists)
+                throw new PortalLegisDomainException(
+                    "ALREADY_REGISTRED", "Email já cadastrado.",
+                    HttpStatusCode.Conflict);
+
+            var defaultGroup = await _grupoRepository.GetByName("Default");
+            if (defaultGroup == null)
+                throw new PortalLegisDomainException(
+                    "DEFAULT_GROUP_NOT_FOUND", "Um erro ocorreu! Tente novamente em alguns instantes.");
+
+            usuario.AddGroup(defaultGroup);
+            await _usuarioRepository.Add(usuario);
+            _usuarioRepository.UnitOfWork.SaveChanges();
+        }
+
         public async Task<List<UsuarioResponse>> GetAll()
         {
             var usuarios = await _usuarioRepository.GetAll(true);

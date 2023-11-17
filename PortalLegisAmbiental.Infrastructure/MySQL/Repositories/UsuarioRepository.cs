@@ -26,6 +26,7 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                 return await _dbContext.Usuarios
                     .AsNoTracking()
                     .Include(user => user.Grupos)
+                    .ThenInclude(grupo => grupo.Permissoes)
                     .Where(user => user.IsActive)
                     .ToListAsync();
             else
@@ -43,10 +44,12 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     return await _dbContext.Usuarios
                         .AsNoTracking()
                         .Include(user => user.Grupos)
+                        .ThenInclude(grupo => grupo.Permissoes)
                         .FirstOrDefaultAsync(usuario => usuario.Id.Equals(id) && usuario.IsActive);
                 else
                     return await _dbContext.Usuarios
                         .Include(user => user.Grupos)
+                        .ThenInclude(grupo => grupo.Permissoes)
                         .FirstOrDefaultAsync(usuario => usuario.Id.Equals(id) && usuario.IsActive);
             }
             else
@@ -69,11 +72,15 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     return await _dbContext.Usuarios
                         .AsNoTracking()
                         .Include(user => user.Grupos)
+                        .ThenInclude(grupo => grupo.Permissoes)
                         .FirstOrDefaultAsync(usuario => usuario.Email.Equals(email) && usuario.IsActive);
                 else
+                {
                     return await _dbContext.Usuarios
                         .Include(user => user.Grupos)
+                        .ThenInclude(grupo => grupo.Permissoes)
                         .FirstOrDefaultAsync(usuario => usuario.Email.Equals(email) && usuario.IsActive);
+                }
             }
             else
             {
@@ -95,11 +102,13 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     return await _dbContext.Usuarios
                         .AsNoTracking()
                         .Include(user => user.Grupos)
+                        .ThenInclude(grupo => grupo.Permissoes)
                         .Where(usuario => usuario.Nome.StartsWith(name) && usuario.IsActive)
                         .ToListAsync();
                 else
                     return await _dbContext.Usuarios
                         .Include(user => user.Grupos)
+                        .ThenInclude(grupo => grupo.Permissoes)
                         .Where(usuario => usuario.Nome.StartsWith(name) && usuario.IsActive)
                         .ToListAsync();
             }
@@ -125,11 +134,13 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     return await _dbContext.Usuarios
                         .AsNoTracking()
                         .Include(user => user.Grupos)
+                        .ThenInclude(grupo => grupo.Permissoes)
                         .Where(usuario => usuario.Email.StartsWith(email) && usuario.IsActive)
                         .ToListAsync();
                 else
                     return await _dbContext.Usuarios
                         .Include(user => user.Grupos)
+                        .ThenInclude(grupo => grupo.Permissoes)
                         .Where(usuario => usuario.Email.StartsWith(email) && usuario.IsActive)
                         .ToListAsync();
             }

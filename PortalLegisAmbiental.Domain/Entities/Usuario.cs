@@ -6,10 +6,10 @@ namespace PortalLegisAmbiental.Domain.Entities
     public class Usuario
     {
         public ulong Id { get; set; }
-        public string Nome { get; set; }
-        public string Email { get; set; }
+        public string Nome { get; set; } = null!;
+        public string Email { get; set; } = null!;
         [JsonIgnore]
-        public string Senha { get; set; }
+        public string Senha { get; set; } = null!;
         public DateTime CreatedAt { get; private set; }
         public DateTime? UpdatedAt { get; private set; }
         public bool IsActive { get; set; }
@@ -17,11 +17,36 @@ namespace PortalLegisAmbiental.Domain.Entities
         public virtual List<Grupo> Grupos { get; set; } = new();
         public virtual List<UsuarioGrupo> UsuarioGrupos { get; set; } = new();
 
+        public Usuario() { }
+
+        public Usuario(
+            ulong id,
+            string nome,
+            string email,
+            string senha,
+            DateTime createdAt,
+            DateTime? updatedAt,
+            bool isActive,
+            List<Grupo> grupos,
+            List<UsuarioGrupo> usuarioGrupos)
+        {
+            Id = id;
+            Nome = nome;
+            Email = email;
+            Senha = senha;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            IsActive = isActive;
+            Grupos = grupos;
+            UsuarioGrupos = usuarioGrupos;
+        }
+
         public Usuario(string nome, string email, string senha)
         {
             Nome = nome;
             Email = email;
-            Senha = BC.HashPassword(senha, BC.GenerateSalt(10));
+            Senha = senha;
+            var teste = BC.Verify(senha, Senha);
             CreatedAt = DateTime.Now;
             UpdatedAt = null;
             IsActive = true;

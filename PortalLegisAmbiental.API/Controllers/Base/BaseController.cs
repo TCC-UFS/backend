@@ -4,6 +4,7 @@ using PortalLegisAmbiental.API.Filters;
 namespace PortalLegisAmbiental.API.Controllers.Base
 {
     [Exception]
+    [ApiController]
     public class BaseController : ControllerBase
     {
         [NonAction]
@@ -24,6 +25,16 @@ namespace PortalLegisAmbiental.API.Controllers.Base
             }
 
             return base.Ok(response);
+        }
+
+        [NonAction]
+        public ActionResult Unauthorized(string code, string message)
+        {
+            return base.Unauthorized(new
+            { 
+                code, 
+                errors = new List<string> { message } 
+            });
         }
     }
 }

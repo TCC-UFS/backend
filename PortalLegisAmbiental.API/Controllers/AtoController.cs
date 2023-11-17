@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PortalLegisAmbiental.API.Controllers.Base;
 using PortalLegisAmbiental.Application.Services.Interfaces;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
@@ -6,7 +7,6 @@ using PortalLegisAmbiental.Domain.Dtos.Requests;
 namespace PortalLegisAmbiental.API.Controllers
 {
     [ApiVersion("1")]
-    [ApiController]
     [Route("api/v{version:apiVersion}/atos")]
     public class AtoController : BaseController
     {
@@ -18,6 +18,7 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Add(AddAtoRequest request)
         {
             var ato = await _atoService.Add(request);
@@ -33,6 +34,7 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetById(ulong id)
         {
             var response = await _atoService.GetById(id);
@@ -40,6 +42,7 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpPatch("update/{id}")]
+        [Authorize]
         public async Task<IActionResult> Update(ulong id, UpdateAtoRequest request)
         {
             request.Id = id;
@@ -48,6 +51,7 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpPatch("disable")]
+        [Authorize]
         public async Task<IActionResult> Disable(ulong id)
         {
             await _atoService.Disable(id);

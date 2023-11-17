@@ -6,6 +6,7 @@ namespace PortalLegisAmbiental.Application.Services.Interfaces
     public interface IUsuarioService
     {
         Task Add(AddUsuarioRequest usuarioRequest);
+        Task Register(AddUsuarioRequest usuarioRequest);
         Task<List<UsuarioResponse>> SearchByName(string? name);
         Task<List<UsuarioResponse>> SearchByEmail(string? email);
         Task<UsuarioResponse> GetById(ulong id);

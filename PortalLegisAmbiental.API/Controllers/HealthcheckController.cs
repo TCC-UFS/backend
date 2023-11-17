@@ -4,7 +4,6 @@ using PortalLegisAmbiental.API.Controllers.Base;
 namespace PortalLegisAmbiental.API.Controllers
 {
     [ApiVersion("1")]
-    [ApiController]
     [Route("api/v{version:apiVersion}/healthcheck")]
     public class HealthcheckController : BaseController
     {
