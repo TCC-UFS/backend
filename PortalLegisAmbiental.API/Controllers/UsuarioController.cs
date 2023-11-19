@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PortalLegisAmbiental.API.Controllers.Base;
+using PortalLegisAmbiental.API.Filters;
 using PortalLegisAmbiental.Application.Services.Interfaces;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
 
 namespace PortalLegisAmbiental.API.Controllers
 {
-    [ApiVersion("1")]
     [Authorize]
+    [Permission]
+    [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/users")]
     public class UsuarioController : BaseController
     {

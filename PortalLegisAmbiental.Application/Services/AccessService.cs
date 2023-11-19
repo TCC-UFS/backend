@@ -50,7 +50,7 @@ namespace PortalLegisAmbiental.Application.Services
             if (jsonData == null)
                 throw new UnauthorizedAccessException("Token inválido.");
 
-            var userData = JsonSerializer.Deserialize<UsuarioResponse>(jsonData);
+            var userData = Newtonsoft.Json.JsonConvert.DeserializeObject<UsuarioResponse>(jsonData);
             if (userData == null)
                 throw new UnauthorizedAccessException("Usuário não encontrado");
 

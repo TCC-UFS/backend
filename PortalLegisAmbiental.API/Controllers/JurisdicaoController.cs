@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PortalLegisAmbiental.API.Controllers.Base;
+using PortalLegisAmbiental.API.Filters;
 using PortalLegisAmbiental.Application.Services.Interfaces;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
 
 namespace PortalLegisAmbiental.API.Controllers
 {
-    [ApiVersion("1")]
     [Authorize]
+    [Permission]
+    [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/jurisdicoes")]
     public class JurisdicaoController : BaseController
     {
@@ -45,7 +47,7 @@ namespace PortalLegisAmbiental.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("serach/{sigla}")]
+        [HttpGet("search/{sigla}")]
         public async Task<IActionResult> SearchState(string sigla)
         {
             var response = await _jurisdicaoService.GetBySigla(sigla);
