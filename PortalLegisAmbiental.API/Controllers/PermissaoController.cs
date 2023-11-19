@@ -28,9 +28,9 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string? resource, string? scope, string? order)
         {
-            var response = await _permissaoService.GetAll();
+            var response = await _permissaoService.Search(resource, scope, order ?? "asc");
             return Ok(response);
         }
 
@@ -38,20 +38,6 @@ namespace PortalLegisAmbiental.API.Controllers
         public async Task<IActionResult> GetById(ulong id)
         {
             var response = await _permissaoService.GetById(id);
-            return Ok(response);
-        }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> Search(string? resource)
-        {
-            var response = await _permissaoService.SearchByResource(resource);
-            return Ok(response);
-        }
-
-        [HttpGet("search/{scope}")]
-        public async Task<IActionResult> SearchScope(string scope)
-        {
-            var response = await _permissaoService.SearchByScope(scope);
             return Ok(response);
         }
 
@@ -63,7 +49,7 @@ namespace PortalLegisAmbiental.API.Controllers
             return NoContent();
         }
 
-        [HttpPatch("disable")]
+        [HttpDelete("disable")]
         public async Task<IActionResult> Disable(ulong id)
         {
             await _permissaoService.Disable(id);

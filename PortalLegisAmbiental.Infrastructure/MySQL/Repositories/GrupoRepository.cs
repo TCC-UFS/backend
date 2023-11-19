@@ -2,6 +2,7 @@
 using PortalLegisAmbiental.Domain.Entities;
 using PortalLegisAmbiental.Domain.IRepositories;
 using PortalLegisAmbiental.Domain.Seedwork;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
 {
@@ -78,34 +79,25 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     .FirstOrDefaultAsync(grupo => grupo.Nome.ToLower().Equals(name.ToLower()) && grupo.IsActive);
         }
 
-        public async Task<List<Grupo>> SearchByName(string name, bool noTracking = false, bool includePermissions = false)
+        public async Task<List<Grupo>> Search(string? name, string order, bool noTracking = false, bool includePermissions = false)
         {
+            var grupos = _dbContext.Grupos.Where(grupo => grupo.IsActive);
+
+            if (noTracking)
+                grupos = grupos.AsNoTracking();
+
             if (includePermissions)
-            {
-                if (noTracking)
-                    return await _dbContext.Grupos
-                        .AsNoTracking()
-                        .Include(grupo => grupo.Permissoes)
-                        .Where(grupo => grupo.Nome.StartsWith(name) && grupo.IsActive)
-                        .ToListAsync();
-                else
-                    return await _dbContext.Grupos
-                        .Include(grupo => grupo.Permissoes)
-                        .Where(grupo => grupo.Nome.StartsWith(name) && grupo.IsActive)
-                        .ToListAsync();
-            }
+                grupos = grupos.Include(grupo => grupo.Permissoes);
+
+            if (!string.IsNullOrEmpty(name))
+                grupos = grupos.Where(grupo => grupo.Nome.StartsWith(name));
+
+            if (order.ToLower().Equals("desc"))
+                grupos = grupos.OrderByDescending(grupo => grupo.Nome);
             else
-            {
-                if (noTracking)
-                    return await _dbContext.Grupos
-                        .AsNoTracking()
-                        .Where(grupo => grupo.Nome.StartsWith(name) && grupo.IsActive)
-                        .ToListAsync();
-                else
-                    return await _dbContext.Grupos
-                        .Where(grupo => grupo.Nome.StartsWith(name) && grupo.IsActive)
-                        .ToListAsync();
-            }
+                grupos = grupos.OrderBy(grupo => grupo.Nome);
+
+            return await grupos.ToListAsync();
         }
 
         public async Task<bool> Exists(Grupo grupo)
@@ -113,17 +105,18 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             return await _dbContext.Grupos
                 .CountAsync(group =>
                     group.Nome.ToLower().Equals(grupo.Nome.ToLower())
-                    && grupo.IsActive) > 0;
+                    && group.IsActive) > 0;
         }
 
         public async Task Disable(Grupo grupo)
         {
             grupo.Disable();
             await _dbContext.Usuarios
-                .Where(user => user.Grupos.Find(guser => guser.Id.Equals(user.Id)) != null)
+                .Include(user => user.Grupos)
+                .Where(user => user.Grupos.Any(guser => guser.Id.Equals(grupo.Id)))
                 .ForEachAsync(user =>
                 {
-                    var guser = user.Grupos.Find(group => group.Id.Equals(user.Id));
+                    var guser = user.Grupos.Find(group => group.Id.Equals(grupo.Id));
                     if (guser != null)
                         user.RemoveGroup(guser);
                 });

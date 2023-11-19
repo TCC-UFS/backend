@@ -27,9 +27,9 @@ namespace PortalLegisAmbiental.API.Controllers
             return NoContent();
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string? state, string? sigla, string? ambito, string? order)
         {
-            var response = await _jurisdicaoService.GetAll();
+            var response = await _jurisdicaoService.Search(state, sigla, ambito, order ?? "asc");
             return Ok(response);
         }
 
@@ -37,27 +37,6 @@ namespace PortalLegisAmbiental.API.Controllers
         public async Task<IActionResult> GetById(ulong id)
         {
             var response = await _jurisdicaoService.GetById(id);
-            return Ok(response);
-        }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> Search(string? state)
-        {
-            var response = await _jurisdicaoService.SearchByState(state);
-            return Ok(response);
-        }
-
-        [HttpGet("search/{sigla}")]
-        public async Task<IActionResult> SearchState(string sigla)
-        {
-            var response = await _jurisdicaoService.GetBySigla(sigla);
-            return Ok(response);
-        }
-
-        [HttpGet("{ambito}")]
-        public async Task<IActionResult> SearchAmbito(string ambito)
-        {
-            var response = await _jurisdicaoService.SearchByAmbito(ambito);
             return Ok(response);
         }
 
@@ -69,7 +48,7 @@ namespace PortalLegisAmbiental.API.Controllers
             return NoContent();
         }
 
-        [HttpPatch("disable")]
+        [HttpDelete("disable")]
         public async Task<IActionResult> Disable(ulong id)
         {
             await _jurisdicaoService.Disable(id);

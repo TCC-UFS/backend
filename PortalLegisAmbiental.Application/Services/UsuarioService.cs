@@ -34,6 +34,7 @@ namespace PortalLegisAmbiental.Application.Services
             _addValidator.ValidateAndThrow(usuarioRequest);
 
             var usuario = _mapper.Map<Usuario>(usuarioRequest);
+            usuario.UpdatePassword(usuarioRequest.Senha);
 
             var exists = await _usuarioRepository.Exists(usuario);
             if (exists)
@@ -50,6 +51,7 @@ namespace PortalLegisAmbiental.Application.Services
             _addValidator.ValidateAndThrow(usuarioRequest);
 
             var usuario = _mapper.Map<Usuario>(usuarioRequest);
+            usuario.UpdatePassword(usuarioRequest.Senha);
 
             var exists = await _usuarioRepository.Exists(usuario);
             if (exists)
@@ -73,17 +75,9 @@ namespace PortalLegisAmbiental.Application.Services
             return _mapper.Map<List<UsuarioResponse>>(usuarios);
         }
 
-        public async Task<List<UsuarioResponse>> SearchByName(string? name)
+        public async Task<List<UsuarioResponse>> Search(string? name, string? email, string order)
         {
-            if (name == null) name = string.Empty;
-            var usuarios = await _usuarioRepository.SearchByName(name, true, true);
-            return _mapper.Map<List<UsuarioResponse>>(usuarios);
-        }
-
-        public async Task<List<UsuarioResponse>> SearchByEmail(string? email)
-        {
-            if (email == null) email = string.Empty;
-            var usuarios = await _usuarioRepository.SearchByName(email, true, true);
+            var usuarios = await _usuarioRepository.Search(name, email, order, true, true);
             return _mapper.Map<List<UsuarioResponse>>(usuarios);
         }
 

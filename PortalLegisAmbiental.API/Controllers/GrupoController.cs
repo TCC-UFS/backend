@@ -28,9 +28,9 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string? name, string? order)
         {
-            var response = await _grupoService.GetAll();
+            var response = await _grupoService.Search(name, order ?? "asc");
             return Ok(response);
         }
 
@@ -38,13 +38,6 @@ namespace PortalLegisAmbiental.API.Controllers
         public async Task<IActionResult> GetById(ulong id)
         {
             var response = await _grupoService.GetById(id);
-            return Ok(response);
-        }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> Search(string? name)
-        {
-            var response = await _grupoService.SearchByName(name);
             return Ok(response);
         }
 
@@ -72,7 +65,7 @@ namespace PortalLegisAmbiental.API.Controllers
             return NoContent();
         }
 
-        [HttpPatch("disable")]
+        [HttpDelete("disable")]
         public async Task<IActionResult> Disable(ulong id)
         {
             await _grupoService.Disable(id);

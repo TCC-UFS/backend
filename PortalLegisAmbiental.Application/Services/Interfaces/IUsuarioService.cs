@@ -7,10 +7,9 @@ namespace PortalLegisAmbiental.Application.Services.Interfaces
     {
         Task Add(AddUsuarioRequest usuarioRequest);
         Task Register(AddUsuarioRequest usuarioRequest);
-        Task<List<UsuarioResponse>> SearchByName(string? name);
-        Task<List<UsuarioResponse>> SearchByEmail(string? email);
-        Task<UsuarioResponse> GetById(ulong id);
         Task<List<UsuarioResponse>> GetAll();
+        Task<UsuarioResponse> GetById(ulong id);
+        Task<List<UsuarioResponse>> Search(string? name, string? email, string order);
         Task Update(UpdateUsuarioRequest usuarioRequest);
         Task AddGroup(UserGroupRequest request);
         Task RemoveGroup(UserGroupRequest request);

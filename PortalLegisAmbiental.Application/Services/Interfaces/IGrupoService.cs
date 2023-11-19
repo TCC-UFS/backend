@@ -6,7 +6,7 @@ namespace PortalLegisAmbiental.Application.Services.Interfaces
     public interface IGrupoService
     {
         Task Add(AddGrupoRequest grupoRequest);
-        Task<List<GrupoResponse>> SearchByName(string? name);
+        Task<List<GrupoResponse>> Search(string? name, string order);
         Task<GrupoResponse> GetById(ulong id);
         Task<List<GrupoResponse>> GetAll();
         Task Update(UpdateGrupoRequest grupoRequest);

@@ -32,41 +32,28 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     .FirstOrDefaultAsync(jurisdicao => jurisdicao.Id.Equals(id) && jurisdicao.IsActive);
         }
 
-        public async Task<List<Jurisdicao>> SearchByState(string estado, bool noTracking = false)
+        public async Task<List<Jurisdicao>> Search(string? state = null, string? sigla = null, EAmbitoType? ambito = null, string order = "desc", bool noTracking = false)
         {
-            if (noTracking)
-                return await _dbContext.Jurisdicoes
-                    .AsNoTracking()
-                    .Where(jurisdicao => jurisdicao.Estado != null && jurisdicao.Estado.StartsWith(estado) && jurisdicao.IsActive)
-                    .ToListAsync();
-            else
-                return await _dbContext.Jurisdicoes
-                    .Where(jurisdicao => jurisdicao.Estado != null && jurisdicao.Estado.StartsWith(estado) && jurisdicao.IsActive)
-                    .ToListAsync();
-        }
+            var jurisdicoes = _dbContext.Jurisdicoes.Where(jur => jur.IsActive);
 
-        public async Task<Jurisdicao?> GetBySigla(string sigla, bool noTracking = false)
-        {
             if (noTracking)
-                return await _dbContext.Jurisdicoes
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync(jurisdicao => jurisdicao.Sigla.Equals(sigla) && jurisdicao.IsActive);
-            else
-                return await _dbContext.Jurisdicoes
-                    .FirstOrDefaultAsync(jurisdicao => jurisdicao.Sigla.Equals(sigla) && jurisdicao.IsActive);
-        }
+                jurisdicoes = jurisdicoes.AsNoTracking();
 
-        public async Task<List<Jurisdicao>> SearchByAmbito(EAmbitoType ambito, bool noTracking = false)
-        {
-            if (noTracking)
-                return await _dbContext.Jurisdicoes
-                    .AsNoTracking()
-                    .Where(jurisdicao => jurisdicao.Ambito.Equals(ambito) && jurisdicao.IsActive)
-                    .ToListAsync();
+            if (!string.IsNullOrEmpty(state))
+                jurisdicoes = jurisdicoes.Where(jur => jur.Estado != null && jur.Estado.StartsWith(state));
+
+            if (!string.IsNullOrEmpty(sigla))
+                jurisdicoes = jurisdicoes.Where(jur => jur.Sigla.Equals(sigla));
+
+            if (ambito.HasValue)
+                jurisdicoes = jurisdicoes.Where(jur => jur.Ambito.Equals(ambito.Value));
+
+            if (order.ToLower().Equals("desc"))
+                jurisdicoes = jurisdicoes.OrderByDescending(jur => jur.Ambito).ThenByDescending(jur => jur.Sigla);
             else
-                return await _dbContext.Jurisdicoes
-                    .Where(jurisdicao => jurisdicao.Ambito.Equals(ambito) && jurisdicao.IsActive)
-                    .ToListAsync();
+                jurisdicoes = jurisdicoes.OrderBy(jur => jur.Ambito).ThenBy(jur => jur.Sigla);
+
+            return await jurisdicoes.ToListAsync();
         }
 
         public async Task<List<Jurisdicao>> GetAll()

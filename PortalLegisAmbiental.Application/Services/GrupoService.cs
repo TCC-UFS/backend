@@ -49,8 +49,51 @@ namespace PortalLegisAmbiental.Application.Services
                     "ALREADY_REGISTRED", "Grupo já cadastrado.",
                     HttpStatusCode.Conflict);
 
-            await _grupoRepository.Add(grupo);
-            _grupoRepository.UnitOfWork.SaveChanges();
+            var transacition = _grupoRepository.UnitOfWork.BeginTransaction();
+            try
+            {
+                var permissionsToAdd = new List<Permissao>();
+                for (var i = 0; i < grupo.Permissoes.Count; i++)
+                {
+                    var perm = grupo.Permissoes[i];
+                    var gperms = grupo.Permissoes.Where(p => p.Recurso.Equals(perm.Recurso) && p.Scope.Equals(perm.Scope));
+                    if (gperms.Count() > 1)
+                        throw new PortalLegisDomainException(
+                            "DUPLICATED_PERMISSIONS", "Não é possível cadastrar duas permissões iguais.");
+
+                    var permission = await _permissaoRepository.GetByResourceAndScope(perm.Recurso, perm.Scope, true);
+                    if (permission != null)
+                    {
+                        permissionsToAdd.Add(perm);
+                    }
+                }
+
+                foreach (var perm in permissionsToAdd)
+                {
+                    grupo.Permissoes.Remove(perm);
+                }
+
+                await _grupoRepository.Add(grupo);
+                _grupoRepository.UnitOfWork.SaveChanges();
+
+                foreach (var perm in permissionsToAdd)
+                {
+                    var req = new GroupPermissionRequest()
+                    {
+                        GrupoId = grupo.Id,
+                        Recurso = perm.Recurso,
+                        Scope = perm.Scope.ToString()
+                    };
+                    await AddPermission(req);
+                }
+
+                await transacition.CommitAsync();
+            }
+            catch(Exception)
+            {
+                await transacition.RollbackAsync();
+                throw;
+            }
         }
 
         public async Task<List<GrupoResponse>> GetAll()
@@ -59,10 +102,9 @@ namespace PortalLegisAmbiental.Application.Services
             return _mapper.Map<List<GrupoResponse>>(grupos);
         }
 
-        public async Task<List<GrupoResponse>> SearchByName(string? name)
+        public async Task<List<GrupoResponse>> Search(string? name, string order)
         {
-            if (name == null) name = string.Empty;
-            var grupos = await _grupoRepository.SearchByName(name, true, true);
+            var grupos = await _grupoRepository.Search(name, order, true, true);
             return _mapper.Map<List<GrupoResponse>>(grupos);
         }
 

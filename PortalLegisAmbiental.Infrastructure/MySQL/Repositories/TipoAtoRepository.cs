@@ -39,17 +39,22 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     .FirstOrDefaultAsync(tipoAto => tipoAto.Id.Equals(id) && tipoAto.IsActive);
         }
 
-        public async Task<List<TipoAto>> SearchByName(string name, bool noTracking = false)
+        public async Task<List<TipoAto>> Search(string? name, string order, bool noTracking = false)
         {
+            var tiposAtos = _dbContext.TiposAtos.Where(tipoAto => tipoAto.IsActive);
+
             if (noTracking)
-                return await _dbContext.TiposAtos
-                    .AsNoTracking()
-                    .Where(tipoAto => tipoAto.Nome.Contains(name) && tipoAto.IsActive)
-                    .ToListAsync();
+                tiposAtos = tiposAtos.AsNoTracking();
+
+            if (!string.IsNullOrEmpty(name))
+                tiposAtos = tiposAtos.Where(tipoAto => tipoAto.Nome.StartsWith(name));
+
+            if (order.ToLower().Equals("desc"))
+                tiposAtos = tiposAtos.OrderByDescending(tipoAto => tipoAto.Nome);
             else
-                return await _dbContext.TiposAtos
-                    .Where(tipoAto => tipoAto.Nome.Contains(name) && tipoAto.IsActive)
-                    .ToListAsync();
+                tiposAtos = tiposAtos.OrderBy(tipoAto => tipoAto.Nome);
+
+            return await tiposAtos.ToListAsync();
         }
 
         public async Task<bool> Exists(TipoAto tipoAto)

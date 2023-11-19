@@ -54,7 +54,7 @@ namespace PortalLegisAmbiental.API.Controllers
 
         [Authorize]
         [Permission]
-        [HttpPatch("disable")]
+        [HttpDelete("disable")]
         public async Task<IActionResult> Disable(ulong id)
         {
             await _atoService.Disable(id);

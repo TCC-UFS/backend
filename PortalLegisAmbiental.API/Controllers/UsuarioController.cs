@@ -28,9 +28,9 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string? name, string? email, string? order)
         {
-            var response = await _usuarioService.GetAll();
+            var response = await _usuarioService.Search(name, email, order ?? "asc");
             return Ok(response);
         }
 
@@ -39,21 +39,6 @@ namespace PortalLegisAmbiental.API.Controllers
         {
             var response = await _usuarioService.GetById(id);
             return Ok(response);
-        }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> Search(string? name, string? email)
-        {
-            if (!string.IsNullOrEmpty(email))
-            {
-                var response = await _usuarioService.SearchByEmail(email);
-                return Ok(response);
-            }
-            else
-            {
-                var response = await _usuarioService.SearchByName(name);
-                return Ok(response);
-            }
         }
 
         [HttpPatch("update/{id}")]
@@ -80,7 +65,7 @@ namespace PortalLegisAmbiental.API.Controllers
             return NoContent();
         }
 
-        [HttpPatch("disable")]
+        [HttpDelete("disable")]
         public async Task<IActionResult> Disable(ulong id)
         {
             await _usuarioService.Disable(id);

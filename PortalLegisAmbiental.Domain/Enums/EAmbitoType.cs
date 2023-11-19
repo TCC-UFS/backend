@@ -2,7 +2,7 @@
 {
     public enum EAmbitoType
     {
-        Federal,
-        Estadual
+        Estadual,
+        Federal
     }
 }

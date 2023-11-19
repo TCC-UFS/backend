@@ -49,20 +49,19 @@ namespace PortalLegisAmbiental.Application.Services
             return _mapper.Map<List<PermissaoResponse>>(permissoes);
         }
 
-        public async Task<List<PermissaoResponse>> SearchByResource(string? recurso)
+        public async Task<List<PermissaoResponse>> Search(string? resource, string? scope, string order)
         {
-            if (recurso == null) recurso = string.Empty;
-            var permissoes = await _permissaoRepository.SearchByResource(recurso, true);
-            return _mapper.Map<List<PermissaoResponse>>(permissoes);
-        }
-
-        public async Task<List<PermissaoResponse>> SearchByScope(string scope)
-        {
-            if (!Enum.TryParse<EScopeType>(scope, true, out var eScope))
+            var isEnum = Enum.TryParse<EScopeType>(scope, true, out var scopeEnum);
+            if (!isEnum && !string.IsNullOrEmpty(scope))
                 throw new PortalLegisDomainException(
-                    "INVALID_SCOPE", "Escopo inválido.");
+                    "BAD_REQUEST", $"{scope} não é um escopo válido.");
 
-            var permissoes = await _permissaoRepository.SearchByScope(eScope, true);
+            List<Permissao> permissoes;
+            if (isEnum)
+                permissoes = await _permissaoRepository.Search(resource, scopeEnum, order, true);
+            else
+                permissoes = await _permissaoRepository.Search(resource, null, order, true);
+            
             return _mapper.Map<List<PermissaoResponse>>(permissoes);
         }
 

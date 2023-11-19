@@ -94,68 +94,28 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             }
         }
 
-        public async Task<List<Usuario>> SearchByName(string name, bool noTracking = false, bool includeGroups = false)
+        public async Task<List<Usuario>> Search(string? name, string? email, string order, bool noTracking = false, bool includeGroups = false)
         {
-            if (includeGroups)
-            {
-                if (noTracking)
-                    return await _dbContext.Usuarios
-                        .AsNoTracking()
-                        .Include(user => user.Grupos)
-                        .ThenInclude(grupo => grupo.Permissoes)
-                        .Where(usuario => usuario.Nome.StartsWith(name) && usuario.IsActive)
-                        .ToListAsync();
-                else
-                    return await _dbContext.Usuarios
-                        .Include(user => user.Grupos)
-                        .ThenInclude(grupo => grupo.Permissoes)
-                        .Where(usuario => usuario.Nome.StartsWith(name) && usuario.IsActive)
-                        .ToListAsync();
-            }
-            else
-            {
-                if (noTracking)
-                    return await _dbContext.Usuarios
-                        .AsNoTracking()
-                        .Where(usuario => usuario.Nome.StartsWith(name) && usuario.IsActive)
-                        .ToListAsync();
-                else
-                    return await _dbContext.Usuarios
-                        .Where(usuario => usuario.Nome.StartsWith(name) && usuario.IsActive)
-                        .ToListAsync();
-            }
-        }
+            var users = _dbContext.Usuarios.Where(user => user.IsActive);
 
-        public async Task<List<Usuario>> SearchByEmail(string email, bool noTracking = false, bool includeGroups = false)
-        {
+            if (noTracking)
+                users = users.AsNoTracking();
+
             if (includeGroups)
-            {
-                if (noTracking)
-                    return await _dbContext.Usuarios
-                        .AsNoTracking()
-                        .Include(user => user.Grupos)
-                        .ThenInclude(grupo => grupo.Permissoes)
-                        .Where(usuario => usuario.Email.StartsWith(email) && usuario.IsActive)
-                        .ToListAsync();
-                else
-                    return await _dbContext.Usuarios
-                        .Include(user => user.Grupos)
-                        .ThenInclude(grupo => grupo.Permissoes)
-                        .Where(usuario => usuario.Email.StartsWith(email) && usuario.IsActive)
-                        .ToListAsync();
-            }
+                users = users.Include(user => user.Grupos).ThenInclude(grupo => grupo.Permissoes);
+
+            if (!string.IsNullOrEmpty(name))
+                users = users.Where(user => user.Nome.StartsWith(name));
+
+            if (!string.IsNullOrEmpty(email))
+                users = users.Where(user => user.Nome.StartsWith(email));
+
+            if (order.ToLower().Equals("desc"))
+                users = users.OrderByDescending(user => user.Nome);
             else
-            {
-                if (noTracking)
-                    return await _dbContext.Usuarios
-                        .AsNoTracking()
-                        .Where(usuario => usuario.Email.StartsWith(email) && usuario.IsActive)
-                        .ToListAsync();
-                else
-                    return await _dbContext.Usuarios
-                        .Where(usuario => usuario.Email.StartsWith(email) && usuario.IsActive)
-                        .ToListAsync();
-            }
+                users = users.OrderBy(user => user.Nome);
+
+            return await users.ToListAsync();
         }
 
         public async Task<bool> Exists(Usuario usuario)

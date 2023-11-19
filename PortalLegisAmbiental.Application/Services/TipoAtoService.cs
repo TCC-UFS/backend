@@ -48,10 +48,9 @@ namespace PortalLegisAmbiental.Application.Services
             return _mapper.Map<List<TipoAtoResponse>>(tiposAtos);
         }
 
-        public async Task<List<TipoAtoResponse>> SearchByName(string? name)
+        public async Task<List<TipoAtoResponse>> Search(string? name, string order)
         {
-            if (name == null) name = string.Empty;
-            var tiposAtos = await _tipoAtoRepository.SearchByName(name, true);
+            var tiposAtos = await _tipoAtoRepository.Search(name, order, true);
             return _mapper.Map<List<TipoAtoResponse>>(tiposAtos);
         }
 

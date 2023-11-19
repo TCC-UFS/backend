@@ -53,32 +53,19 @@ namespace PortalLegisAmbiental.Application.Services
             return _mapper.Map<List<JurisdicaoResponse>>(jurisdicoes);
         }
 
-        public async Task<List<JurisdicaoResponse>> SearchByState(string? estado)
+        public async Task<List<JurisdicaoResponse>> Search(string? state, string? sigla, string? ambito, string order)
         {
-            if (estado == null) estado = string.Empty;
-            var jurisdicoes = await _jurisdicaoRepository.SearchByState(estado, true);
-            return _mapper.Map<List<JurisdicaoResponse>>(jurisdicoes);
-        }
-
-        public async Task<JurisdicaoResponse> GetBySigla(string sigla)
-        {
-            var jurisdicao = await _jurisdicaoRepository.GetBySigla(sigla, true);
-
-            if (jurisdicao == null)
+            var isEnum = Enum.TryParse<EAmbitoType>(ambito, true, out var ambitoEnum);
+            if (!isEnum && !string.IsNullOrEmpty(ambito))
                 throw new PortalLegisDomainException(
-                    "KEY_NOT_FOUND", "Jurisdição não encontrada.",
-                    HttpStatusCode.NotFound);
+                    "BAD_REQUEST", $"{ambito} não é um ambito válido.");
 
-            return _mapper.Map<JurisdicaoResponse>(jurisdicao);
-        }
-
-        public async Task<List<JurisdicaoResponse>> SearchByAmbito(string ambito)
-        {
-            if (!Enum.TryParse<EAmbitoType>(ambito, true, out var eAmbito))
-                throw new PortalLegisDomainException(
-                    "INVALID_AMBITO", "Ambito inválido.");
-
-            var jurisdicoes = await _jurisdicaoRepository.SearchByAmbito(eAmbito, true);
+            List<Jurisdicao> jurisdicoes;
+            if (isEnum)
+                jurisdicoes = await _jurisdicaoRepository.Search(state, sigla, ambitoEnum, order, true);
+            else
+                jurisdicoes = await _jurisdicaoRepository.Search(state, sigla, null, order, true);
+            
             return _mapper.Map<List<JurisdicaoResponse>>(jurisdicoes);
         }
 

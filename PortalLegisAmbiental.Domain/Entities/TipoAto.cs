@@ -2,9 +2,9 @@
 {
     public class TipoAto
     {
-        public ulong Id { get; set; }
-        public string Nome { get; set; }
-        public bool IsActive { get; set; }
+        public ulong Id { get; private set; }
+        public string Nome { get; private set; }
+        public bool IsActive { get; private set; }
 
         public TipoAto(string nome)
         {

@@ -3,6 +3,7 @@ using PortalLegisAmbiental.Domain.Entities;
 using PortalLegisAmbiental.Domain.Enums;
 using PortalLegisAmbiental.Domain.IRepositories;
 using PortalLegisAmbiental.Domain.Seedwork;
+using System.Diagnostics.SymbolStore;
 
 namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
 {
@@ -46,6 +47,27 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                     .FirstOrDefaultAsync(permissao => permissao.Id.Equals(id) && permissao.IsActive);
         }
 
+        public async Task<List<Permissao>> Search(string? resource, EScopeType? scope, string order, bool noTracking = false)
+        {
+            var permissoes = _dbContext.Permissoes.Where(perm => perm.IsActive);
+
+            if (noTracking)
+                permissoes = permissoes.AsNoTracking();
+
+            if (!string.IsNullOrEmpty(resource))
+                permissoes = permissoes.Where(perm => perm.Recurso.StartsWith(resource));
+
+            if (scope.HasValue)
+                permissoes = permissoes.Where(perm => perm.Scope.Equals(scope.Value));
+
+            if (order.ToLower().Equals("desc"))
+                permissoes = permissoes.OrderByDescending(perm => perm.Scope).ThenByDescending(perm => perm.Recurso);
+            else
+                permissoes = permissoes.OrderBy(perm => perm.Scope).ThenBy(perm => perm.Recurso);
+
+            return await permissoes.ToListAsync();
+        }
+
         public async Task<Permissao?> GetByResourceAndScope(string recurso, EScopeType scope, bool noTracking = false)
         {
             if (noTracking)
@@ -63,46 +85,20 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                         && permissao.IsActive);
         }
 
-        public async Task<List<Permissao>> SearchByResource(string recurso, bool noTracking = false)
-        {
-            if (noTracking)
-                return await _dbContext.Permissoes
-                    .AsNoTracking()
-                    .Where(permissao => permissao.Recurso.StartsWith(recurso) && permissao.IsActive)
-                    .ToListAsync();
-            else
-                return await _dbContext.Permissoes
-                    .Where(permissao => permissao.Recurso.StartsWith(recurso) && permissao.IsActive)
-                    .ToListAsync();
-        }
-
-        public async Task<List<Permissao>> SearchByScope(EScopeType scope, bool noTracking = false)
-        {
-            if (noTracking)
-                return await _dbContext.Permissoes
-                    .AsNoTracking()
-                    .Where(permissao => permissao.Scope.Equals(scope) && permissao.IsActive)
-                    .ToListAsync();
-            else
-                return await _dbContext.Permissoes
-                    .Where(permissao => permissao.Scope.Equals(scope) && permissao.IsActive)
-                    .ToListAsync();
-        }
-
         public async Task<bool> Exists(Permissao permissao)
         {
             return await _dbContext.Permissoes
                 .CountAsync(perm =>
                     perm.Scope.Equals(permissao.Scope)
                     && perm.Recurso.Equals(permissao.Recurso)
-                    && permissao.IsActive) > 0;
+                    && perm.IsActive) > 0;
         }
 
         public async Task Disable(Permissao permissao)
         {
             permissao.Disable();
-            await _dbContext.Grupos
-                .Where(grupo => grupo.Permissoes.Find(gperm => gperm.Id.Equals(permissao.Id)) != null)
+            await _dbContext.Grupos.Include(grupo => grupo.Permissoes)
+                .Where(grupo => grupo.Permissoes.Any(gperm => gperm.Id.Equals(permissao.Id)))
                 .ForEachAsync(grupo =>
                 {
                     var gperm = grupo.Permissoes.Find(gperm => gperm.Id.Equals(permissao.Id));
