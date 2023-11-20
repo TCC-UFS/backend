@@ -71,7 +71,7 @@ namespace PortalLegisAmbiental.API.DependencyInjection
 
                 client.BaseAddress = new Uri(uri);
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", authString);
-            }).ConfigurePrimaryHttpMessageHandler(x => handler); ;
+            }).ConfigurePrimaryHttpMessageHandler(configHandler => handler);
         }
     }
 }
