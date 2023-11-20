@@ -6,6 +6,7 @@
         public string Instance { get; set; }
         public List<string> Errors { get; set; }
         public string? Exception { get; set; }
+        public string? InnerException { get; set; } = null;
 
         public ErrorResponse(string instance, List<string> errors, string? exception)
         {
@@ -22,6 +23,7 @@
         public void NoException()
         {
             Exception = null;
+            InnerException = null;
         }
     }
 }

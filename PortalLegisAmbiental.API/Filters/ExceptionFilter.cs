@@ -49,7 +49,10 @@ namespace PortalLegisAmbiental.API.Filters
                 }
             }
             else
+            {
                 result.Errors.Add(message);
+                result.InnerException = context.Exception.InnerException?.Message;
+            }
 
             if (exceptionType == "PortalLegisDomainException")
             {
@@ -72,7 +75,7 @@ namespace PortalLegisAmbiental.API.Filters
                 WriteIndented = true
             };
 
-            if (!_hostEnvironment.IsDevelopment())
+            if (_hostEnvironment.IsProduction())
             {
                 result.NoException();
             }
