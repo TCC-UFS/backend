@@ -52,7 +52,14 @@ namespace PortalLegisAmbiental.API.DependencyInjection
             var path = "/var/www/ssl/projetosufs.cloud/es2/cert.pem";
 
             if (File.Exists(path))
+            {
                 handler.ClientCertificates.Add(new X509Certificate2(path));
+                handler.ServerCertificateCustomValidationCallback =
+                (httpRequestMessage, cert, cetChain, policyErrors) =>
+                {
+                    return true;
+                };
+            }
 
             services.AddHttpClient("Elastic", client =>
             {
