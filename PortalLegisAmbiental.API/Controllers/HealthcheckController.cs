@@ -2,21 +2,25 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PortalLegisAmbiental.API.Controllers.Base;
 using PortalLegisAmbiental.API.Filters;
+using PortalLegisAmbiental.Domain.IRepositories;
 
 namespace PortalLegisAmbiental.API.Controllers
 {
-    [Authorize]
-    [Permission]
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/healthcheck")]
     public class HealthcheckController : BaseController
     {
-        public HealthcheckController() { }
+        private readonly ISearchRepository _searchRepository;
+        public HealthcheckController(ISearchRepository searchRepository)
+        {
+            _searchRepository = searchRepository;
+        }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok("I'm alive and geting.");
+            var result = await _searchRepository.Teste();
+            return Ok(result);
         }
 
         [HttpPost]

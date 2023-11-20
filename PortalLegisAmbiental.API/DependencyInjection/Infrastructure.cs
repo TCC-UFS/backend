@@ -1,4 +1,5 @@
 ﻿using PortalLegisAmbiental.Domain.IRepositories;
+using PortalLegisAmbiental.Infrastructure.ElasticSearch;
 using PortalLegisAmbiental.Infrastructure.MySQL;
 using PortalLegisAmbiental.Infrastructure.MySQL.Repositories;
 
@@ -16,6 +17,7 @@ namespace PortalLegisAmbiental.API.DependencyInjection
             services.AddScoped<IGrupoRepository, GrupoRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IAtoRepository, AtoRepository>();
+            services.AddScoped<ISearchRepository, SearchRepository>();
         }
     }
 }

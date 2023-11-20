@@ -126,6 +126,18 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+builder.Services.AddHttpClient("Elastic", client =>
+{
+    var uri = Environment.GetEnvironmentVariable("ELASTIC_URL");
+    var authString = Environment.GetEnvironmentVariable("ELASTIC_TOKEN");
+
+    if (string.IsNullOrEmpty(uri) || string.IsNullOrEmpty(authString))
+        throw new NotSupportedException("Um erro interno ocorreu.");
+
+    client.BaseAddress = new Uri(uri);
+    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", authString);
+});
+
 // Aplication Injections
 builder.Services.AddServices();
 builder.Services.AddValidators();
