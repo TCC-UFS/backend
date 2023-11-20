@@ -23,7 +23,7 @@ namespace PortalLegisAmbiental.API.Controllers
 
         [HttpPost]
         [Authorize]
-        public async IActionResult Post()
+        public async Task<IActionResult> Post()
         {
             var result = await _searchRepository.Teste();
             return Ok(result);
