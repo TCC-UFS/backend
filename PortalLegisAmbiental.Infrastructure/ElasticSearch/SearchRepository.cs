@@ -8,7 +8,16 @@ namespace PortalLegisAmbiental.Infrastructure.ElasticSearch
 
         public SearchRepository(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClientFactory.CreateClient("Elastic");
+            try
+            {
+                _httpClient = httpClientFactory.CreateClient("Elastic");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.InnerException?.Message);
+                throw;
+            }
         }
 
         public async Task<string> Teste()
