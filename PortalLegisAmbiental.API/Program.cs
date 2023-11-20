@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PortalLegisAmbiental.API.DependencyInjection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 
@@ -126,19 +127,8 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-builder.Services.AddHttpClient("Elastic", client =>
-{
-    var uri = Environment.GetEnvironmentVariable("ELASTIC_URL");
-    var authString = Environment.GetEnvironmentVariable("ELASTIC_TOKEN");
-
-    if (string.IsNullOrEmpty(uri) || string.IsNullOrEmpty(authString))
-        throw new NotSupportedException("Um erro interno ocorreu.");
-
-    client.BaseAddress = new Uri(uri);
-    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", authString);
-});
-
 // Aplication Injections
+builder.Services.AddElasticClient();
 builder.Services.AddServices();
 builder.Services.AddValidators();
 builder.Services.AddRepositories();

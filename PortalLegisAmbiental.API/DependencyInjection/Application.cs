@@ -3,6 +3,7 @@ using PortalLegisAmbiental.Application.Services;
 using PortalLegisAmbiental.Application.Services.Interfaces;
 using PortalLegisAmbiental.Application.Validators;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
+using System.Security.Cryptography.X509Certificates;
 
 namespace PortalLegisAmbiental.API.DependencyInjection
 {
@@ -40,6 +41,37 @@ namespace PortalLegisAmbiental.API.DependencyInjection
 
             services.AddScoped<IValidator<AddAtoRequest>, AddAtoValidator>();
             services.AddScoped<IValidator<UpdateAtoRequest>, UpdateAtoValidator>();
+        }
+
+        internal static void AddElasticClient(this IServiceCollection services)
+        {
+
+            var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+            var path = "/var/www/ssl/projetosufs.cloud/es2/cert.pem";
+
+            if (File.Exists(path))
+            {
+                handler.ClientCertificates.Add(new X509Certificate2(path));
+            }
+
+            handler.ServerCertificateCustomValidationCallback =
+            (httpRequestMessage, cert, cetChain, policyErrors) =>
+            {
+                return true;
+            };
+            services.AddHttpClient("Elastic", client =>
+            {
+                var uri = Environment.GetEnvironmentVariable("ELASTIC_URL");
+                var authString = Environment.GetEnvironmentVariable("ELASTIC_TOKEN");
+
+                if (string.IsNullOrEmpty(uri) || string.IsNullOrEmpty(authString))
+                    throw new NotSupportedException("Um erro interno ocorreu.");
+
+                client.BaseAddress = new Uri(uri);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", authString);
+            }).ConfigurePrimaryHttpMessageHandler(x => handler); ;
         }
     }
 }
