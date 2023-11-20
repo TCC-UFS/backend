@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PortalLegisAmbiental.API.Controllers.Base;
-using PortalLegisAmbiental.API.Filters;
 using PortalLegisAmbiental.Domain.IRepositories;
 
 namespace PortalLegisAmbiental.API.Controllers
@@ -19,14 +18,15 @@ namespace PortalLegisAmbiental.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await _searchRepository.Teste();
-            return Ok(result);
+            return Ok("I'm alive and geting.");
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Post()
         {
-            return Ok("I'm alive and posting.");
+            var result = await _searchRepository.Teste();
+            return Ok(result);
         }
 
         [HttpPatch]
