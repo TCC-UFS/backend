@@ -16,14 +16,14 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             return Ok("I'm alive and geting.");
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Post()
+        public async Task<IActionResult> Post()
         {
             var result = await _searchRepository.Teste();
             return Ok(result);
