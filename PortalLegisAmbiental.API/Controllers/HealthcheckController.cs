@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PortalLegisAmbiental.API.Controllers.Base;
+using PortalLegisAmbiental.Domain.Dtos;
 using PortalLegisAmbiental.Domain.IRepositories;
 
 namespace PortalLegisAmbiental.API.Controllers
