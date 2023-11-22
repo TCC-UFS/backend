@@ -32,7 +32,7 @@ namespace PortalLegisAmbiental.API.Controllers
                             Conteudo = new
                             {
                                 query = frase
-        }
+                            }
                         }
                     }
                 }
@@ -45,24 +45,12 @@ namespace PortalLegisAmbiental.API.Controllers
         [Authorize]
         public async Task<IActionResult> Post()
         {
-            var result = await _searchRepository.Teste();
-            return Ok(result);
-        }
-
-        [HttpPatch]
-        public IActionResult Patch()
-        {
-            return Ok("I'm alive and patching.");
-        }
-
-        [HttpPut]
-        public IActionResult Put()
-        {
-            return Ok("I'm alive and puting");
+            return Ok("I'm alive and postting.");
         }
 
         [HttpDelete]
-        public IActionResult Delete()
+        [Authorize]
+        public async Task<IActionResult> Delete()
         {
             return Ok("I'm alive and deleting.");
         }
