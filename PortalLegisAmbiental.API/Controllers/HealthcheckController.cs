@@ -16,9 +16,28 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        [Authorize]
+        public async Task<IActionResult> Get(string frase)
         {
-            return Ok("I'm alive and geting.");
+            var search = new ElasticDto.Search()
+            {
+                Jurisdicao = "br",
+                Query = new
+                {
+                    query = new
+                    {
+                        match_phrase = new
+                        {
+                            Conteudo = new
+                            {
+                                query = frase
+        }
+                        }
+                    }
+                }
+            };
+            var response = await _searchRepository.Search(search);
+            return Ok(response?.Hits?.Hits);
         }
 
         [HttpPost]
