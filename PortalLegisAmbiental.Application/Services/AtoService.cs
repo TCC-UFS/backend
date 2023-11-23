@@ -4,6 +4,7 @@ using AutoMapper.Execution;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using PortalLegisAmbiental.Application.Services.Interfaces;
+using PortalLegisAmbiental.Domain.Dtos;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
 using PortalLegisAmbiental.Domain.Dtos.Responses;
 using PortalLegisAmbiental.Domain.Entities;
@@ -17,6 +18,7 @@ namespace PortalLegisAmbiental.Application.Services
     public class AtoService : IAtoService
     {
         private readonly IAtoRepository _atoRepository;
+        private readonly ISearchRepository _elasticRepository;
         private readonly ITipoAtoRepository _tipoAtoRepository;
         private readonly IJurisdicaoRepository _jurisdicaoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
@@ -27,9 +29,10 @@ namespace PortalLegisAmbiental.Application.Services
         public AtoService(IAtoRepository atoRepository, ITipoAtoRepository tipoAtoRepository,
             IJurisdicaoRepository jurisdicaoRepository, IUsuarioRepository usuarioRepository,
             IValidator<AddAtoRequest> addValidator, IValidator<UpdateAtoRequest> updateValidator,
-            IMapper mapper)
+            IMapper mapper, ISearchRepository elasticRepository)
         {
             _atoRepository = atoRepository;
+            _elasticRepository = elasticRepository;
             _tipoAtoRepository = tipoAtoRepository;
             _jurisdicaoRepository = jurisdicaoRepository;
             _usuarioRepository = usuarioRepository;
@@ -69,14 +72,48 @@ namespace PortalLegisAmbiental.Application.Services
                     "ALREADY_REGISTRED", "Ato já cadastrado.",
                     HttpStatusCode.NotFound);
 
-            var response = await _atoRepository.Add(ato);
-            //if (ato.PossuiConteudo || ato.PossuiHtml)
-            //{
-            // TODO: ADD TO ELASTICSEARCH
-            //}
+            var transaction = _atoRepository.UnitOfWork.BeginTransaction();
 
+            await _atoRepository.Add(ato);
             _atoRepository.UnitOfWork.SaveChanges();
-            return _mapper.Map<AtoResponse>(response);
+
+            if (ato.PossuiConteudo || ato.PossuiHtml)
+            {
+                var jur = await _jurisdicaoRepository.GetById(atoRequest.JurisdicaoId, true);
+                var tpAto = await _tipoAtoRepository.GetById(atoRequest.TipoAtoId, true);
+                
+                string? tipoAtoStr = string.Empty;
+                if (tpAto != null)
+                    tipoAtoStr = tpAto.Nome.ToLower().Replace(" ", "_")?.Replace("-", "_");
+
+                string jurStr = string.Empty;
+                if (jur != null)
+                    jurStr = jur.Ambito.ToString();
+
+                ElasticDto.Data elasticData = new()
+                {
+                    IdAto = ato.Id,
+                    Conteudo = atoRequest.Conteudo ?? string.Empty,
+                    Html = atoRequest.Html ?? string.Empty,
+                    Ambito = jurStr,
+                    Jurisdicao = jur?.Sigla ?? string.Empty,
+                    TipoAto = tipoAtoStr ?? string.Empty
+                };
+
+                try
+                {
+                    await _elasticRepository.AddOrUpdate(elasticData);
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+
+            await transaction.CommitAsync();
+
+            return _mapper.Map<AtoResponse>(ato);
         }
 
         public async Task<List<AtoResponse>> GetAll()
@@ -193,6 +230,32 @@ namespace PortalLegisAmbiental.Application.Services
                     throw new PortalLegisDomainException(
                         "ALREADY_REGISTRED", "Ato já cadastrado.",
                         HttpStatusCode.NotFound);
+            }
+
+            if (ato.PossuiConteudo || ato.PossuiHtml)
+            {
+                var jur = await _jurisdicaoRepository.GetById(ato.JurisdicaoId, true);
+                var tpAto = await _tipoAtoRepository.GetById(ato.TipoAtoId, true);
+
+                string? tipoAtoStr = string.Empty;
+                if (tpAto != null)
+                    tipoAtoStr = tpAto.Nome.ToLower().Replace(" ", "_")?.Replace("-", "_");
+
+                string jurStr = string.Empty;
+                if (jur != null)
+                    jurStr = jur.Ambito.ToString();
+
+                ElasticDto.Data elasticData = new()
+                {
+                    IdAto = ato.Id,
+                    Conteudo = atoRequest.Conteudo ?? string.Empty,
+                    Html = atoRequest.Html ?? string.Empty,
+                    Ambito = jurStr,
+                    Jurisdicao = jur?.Sigla ?? string.Empty,
+                    TipoAto = tipoAtoStr ?? string.Empty
+                };
+
+                await _elasticRepository.AddOrUpdate(elasticData);
             }
 
             _atoRepository.UnitOfWork.SaveChanges();
