@@ -31,13 +31,27 @@ namespace PortalLegisAmbiental.Infrastructure.ElasticSearch
             if (searchData.Jurisdicao == null) index = "/";
             else index = searchData.Jurisdicao.ToLower() + "/";
 
-            if (searchData.Query != null)
+            if (searchData.Query != null || searchData.BaseQuery != null)
             {
-                var content = JsonSerializer.Serialize(searchData.Query, new JsonSerializerOptions()
+                string content = string.Empty;
+                if (searchData.Query != null)
                 {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-                });
+                    content = JsonSerializer.Serialize(searchData.Query, new JsonSerializerOptions()
+                    {
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                    });
+                }
+
+                if (searchData.BaseQuery != null)
+                {
+                    content = JsonSerializer.Serialize(searchData.BaseQuery, new JsonSerializerOptions()
+                    {
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                    });
+                }
+
                 var strContent = new StringContent(content, Encoding.UTF8, "application/json");
 
                 var uri = _httpClient.BaseAddress + $"{index}_search";

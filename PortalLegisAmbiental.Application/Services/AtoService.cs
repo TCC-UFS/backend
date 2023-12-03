@@ -1,8 +1,6 @@
 ﻿
 using AutoMapper;
-using AutoMapper.Execution;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 using PortalLegisAmbiental.Application.Services.Interfaces;
 using PortalLegisAmbiental.Domain.Dtos;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
@@ -93,11 +91,16 @@ namespace PortalLegisAmbiental.Application.Services
                 ElasticDto.Data elasticData = new()
                 {
                     IdAto = ato.Id,
+                    Numero = ato.Numero,
+                    Ementa = ato.Ementa,
                     Conteudo = atoRequest.Conteudo ?? string.Empty,
                     Html = atoRequest.Html ?? string.Empty,
                     Ambito = jurStr,
                     Jurisdicao = jur?.Sigla ?? string.Empty,
-                    TipoAto = tipoAtoStr ?? string.Empty
+                    TipoAto = tipoAtoStr ?? string.Empty,
+                    DataAto = ato.DataAto,
+                    DataPublicacao = ato.DataPublicacao == default ? ato.DataAto : ato.DataPublicacao,
+                    Disponivel = ato.Disponivel
                 };
 
                 try
@@ -186,7 +189,7 @@ namespace PortalLegisAmbiental.Application.Services
             ato.UpdatePublishDate(atoRequest.DataPublicacao);
             ato.UpdateEmenta(atoRequest.Ementa);
 
-            if (atoRequest.Disponivel)
+            if (atoRequest.Disponivel.HasValue && atoRequest.Disponivel.Value)
                 ato.Publish();
             else
                 ato.Unpublish();
@@ -245,14 +248,37 @@ namespace PortalLegisAmbiental.Application.Services
                 if (jur != null)
                     jurStr = jur.Ambito.ToString();
 
+                var searchRequest = new ElasticDto.Search();
+                searchRequest.BaseQuery = new();
+                searchRequest.BaseQuery.Size = 1;
+                searchRequest.BaseQuery.Query = new();
+                searchRequest.BaseQuery.Query.Bool = new();
+                searchRequest.BaseQuery.Query.Bool.Must.Add(
+                    new {
+                        match = new
+                        {
+                            idAto = new
+                            {
+                                query = ato.Id
+                            }
+                        }
+                    });
+                var contents = await _elasticRepository.Search(searchRequest);
+                var content = contents?.Hits.Hits.Select(hit => hit.data).FirstOrDefault();
+
                 ElasticDto.Data elasticData = new()
                 {
                     IdAto = ato.Id,
-                    Conteudo = atoRequest.Conteudo ?? string.Empty,
-                    Html = atoRequest.Html ?? string.Empty,
+                    Numero = ato.Numero,
+                    Ementa = ato.Ementa,
+                    Conteudo = atoRequest.Conteudo ?? content?.Conteudo ?? string.Empty,
+                    Html = atoRequest.Html ?? content?.Html ?? string.Empty,
                     Ambito = jurStr,
                     Jurisdicao = jur?.Sigla ?? string.Empty,
-                    TipoAto = tipoAtoStr ?? string.Empty
+                    TipoAto = tipoAtoStr ?? string.Empty,
+                    DataAto = ato.DataAto,
+                    DataPublicacao = ato.DataPublicacao == default ? ato.DataAto : ato.DataPublicacao,
+                    Disponivel = ato.Disponivel
                 };
 
                 await _elasticRepository.AddOrUpdate(elasticData);

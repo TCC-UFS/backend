@@ -20,6 +20,7 @@ namespace PortalLegisAmbiental.API.DependencyInjection
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IAtoService, AtoService>();
             services.AddScoped<IAccessService, AccessService>();
+            services.AddScoped<IElasticService, SearchService>();
         }
 
         internal static void AddValidators(this IServiceCollection services)

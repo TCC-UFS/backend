@@ -7,17 +7,47 @@ namespace PortalLegisAmbiental.Domain.Dtos
         public class Data
         {
             public ulong IdAto { get; set; }
+            public string Numero { get; set; } = string.Empty;
+            public string Ementa { get; set; } = string.Empty;
             public string Conteudo { get; set; } = string.Empty;
             public string Html { get; set; } = string.Empty;
             public string TipoAto { get; set; } = string.Empty;
             public string Ambito { get; set; } = string.Empty;
             public string Jurisdicao { get; set; } = string.Empty;
+            public DateTime DataPublicacao { get; set; }
+            public DateTime DataAto { get; set; }
+            public bool Disponivel { get; set; }
         }
 
         public class Search
         {
             public string? Jurisdicao { get; set; }
             public object Query { get; set; } = null!;
+            public BaseQuery BaseQuery { get; set; } = null!;
+        }
+
+        public class BaseQuery
+        {
+            public List<object> Sort { get; set; } = null!;
+            public int From { get; set; } = 0;
+            public int Size { get; set; } = 10;
+            public Query Query { get; set; } = null!;
+        }
+
+        public class Query
+        {
+            public BoolData Bool { get; set; } = null!;
+        }
+
+        public class BoolData
+        {
+            public List<object> Must { get; set; } = new();
+            public List<FilterData> Filter { get; set; } = null!;
+        }
+        
+        public class FilterData
+        {
+            public object Term { get; set; } = null!;
         }
 
         public class ReadResponse

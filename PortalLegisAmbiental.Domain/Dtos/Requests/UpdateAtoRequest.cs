@@ -13,7 +13,7 @@ namespace PortalLegisAmbiental.Domain.Dtos.Requests
         public string? CaminhoArquivo { get; set; }
         public string? Conteudo { get; set; }
         public string? Html { get; set; }
-        public bool Disponivel { get; set; }
+        public bool? Disponivel { get; set; }
         public ulong TipoAtoId { get; set; }
         public ulong JurisdicaoId { get; set; }
     }

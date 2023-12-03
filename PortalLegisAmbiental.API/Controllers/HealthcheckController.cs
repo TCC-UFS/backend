@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PortalLegisAmbiental.API.Controllers.Base;
-using PortalLegisAmbiental.Domain.Dtos;
 using PortalLegisAmbiental.Domain.IRepositories;
 
 namespace PortalLegisAmbiental.API.Controllers
@@ -17,40 +15,19 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Get(string frase)
+        public IActionResult Get()
         {
-            var search = new ElasticDto.Search()
-            {
-                Jurisdicao = "br",
-                Query = new
-                {
-                    query = new
-                    {
-                        match_phrase = new
-                        {
-                            Conteudo = new
-                            {
-                                query = frase
-                            }
-                        }
-                    }
-                }
-            };
-            var response = await _searchRepository.Search(search);
-            return Ok(response?.Hits?.Hits);
+            return Ok("I'm alive and getting.");
         }
 
         [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Post()
+        public IActionResult Post()
         {
             return Ok("I'm alive and postting.");
         }
 
         [HttpDelete]
-        [Authorize]
-        public async Task<IActionResult> Delete()
+        public IActionResult Delete()
         {
             return Ok("I'm alive and deleting.");
         }
