@@ -96,14 +96,15 @@ namespace PortalLegisAmbiental.Application.Services
                 var filePath = Path.Combine(_environment.WebRootPath, $"{fileName}");
                 var dirJurPath = Path.Combine(_environment.WebRootPath, $"{jur}");
                 var dirTypePath = Path.Combine(_environment.WebRootPath, $"{jur}/{tipo}");
+                
+                if (!Directory.Exists(dirJurPath))
+                    Directory.CreateDirectory(dirJurPath);
+
+                if (!Directory.Exists(dirTypePath))
+                    Directory.CreateDirectory(dirTypePath);
+
                 using (var fileSteam = new FileStream(filePath, FileMode.Create))
-                {
-                    if (!Directory.Exists(dirJurPath))
-                        Directory.CreateDirectory(dirJurPath);
-                    
-                    if (!Directory.Exists(dirTypePath)) 
-                        Directory.CreateDirectory(dirTypePath);
-                    
+                {    
                     await atoRequest.File.CopyToAsync(fileSteam);
                 }
 
@@ -299,14 +300,15 @@ namespace PortalLegisAmbiental.Application.Services
                 var filePath = Path.Combine(_environment.WebRootPath, $"{fileName}");
                 var dirJurPath = Path.Combine(_environment.WebRootPath, $"{jur}");
                 var dirTypePath = Path.Combine(_environment.WebRootPath, $"{jur}/{tipo}");
-                using (var fileSteam = new FileStream(filePath, FileMode.Create))
-                {
-                    if (!Directory.Exists(dirJurPath))
+                    
+                if (!Directory.Exists(dirJurPath))
                         Directory.CreateDirectory(dirJurPath);
 
-                    if (!Directory.Exists(dirTypePath))
+                if (!Directory.Exists(dirTypePath))
                         Directory.CreateDirectory(dirTypePath);
 
+                using (var fileSteam = new FileStream(filePath, FileMode.Create))
+                {
                     await atoRequest.File.CopyToAsync(fileSteam);
                 }
 
