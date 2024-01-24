@@ -43,10 +43,10 @@ namespace PortalLegisAmbiental.Application.Mappers
                 {
                     Id = hit.IdAto,
                     Conteudo = hit.Html ?? hit.Conteudo,
-                    //Numero = hit.Numero,
-                    //Ementa = hit.Ementa,
-                    //DataPublicacao = hit.DataPublicacao,
-                    //DataAto = hit.DataAto,
+                    Numero = hit.Numero,
+                    Ementa = hit.Ementa,
+                    DataPublicacao = hit.DataPublicacao,
+                    DataAto = hit.DataAto,
                     Disponivel = hit.Disponivel,
                     Jurisdicao = hit.Jurisdicao,
                     TipoAto = hit.TipoAto

@@ -132,15 +132,15 @@ namespace PortalLegisAmbiental.Application.Services
                 ElasticDto.Data elasticData = new()
                 {
                     IdAto = ato.Id,
-                    //Numero = ato.Numero,
-                    //Ementa = ato.Ementa,
+                    Numero = ato.Numero,
+                    Ementa = ato.Ementa,
                     Conteudo = atoRequest.Conteudo ?? string.Empty,
                     Html = atoRequest.Html ?? string.Empty,
                     Ambito = jurStr,
                     Jurisdicao = jur?.Sigla ?? string.Empty,
                     TipoAto = tipoAtoStr ?? string.Empty,
-                    //DataAto = ato.DataAto,
-                    //DataPublicacao = ato.DataPublicacao == default ? ato.DataAto : ato.DataPublicacao,
+                    DataAto = ato.DataAto,
+                    DataPublicacao = ato.DataPublicacao == default ? ato.DataAto : ato.DataPublicacao,
                     Disponivel = ato.Disponivel
                 };
 
@@ -349,15 +349,15 @@ namespace PortalLegisAmbiental.Application.Services
                 ElasticDto.Data elasticData = new()
                 {
                     IdAto = ato.Id,
-                    //Numero = ato.Numero,
-                    //Ementa = ato.Ementa,
+                    Numero = ato.Numero,
+                    Ementa = ato.Ementa,
                     Conteudo = atoRequest.Conteudo ?? content?.Conteudo ?? string.Empty,
                     Html = atoRequest.Html ?? content?.Html ?? string.Empty,
                     Ambito = jurStr,
                     Jurisdicao = jur?.Sigla ?? string.Empty,
                     TipoAto = tipoAtoStr ?? string.Empty,
-                    //DataAto = ato.DataAto,
-                    //DataPublicacao = ato.DataPublicacao == default ? ato.DataAto : ato.DataPublicacao,
+                    DataAto = ato.DataAto,
+                    DataPublicacao = ato.DataPublicacao == default ? ato.DataAto : ato.DataPublicacao,
                     Disponivel = ato.Disponivel
                 };
 
