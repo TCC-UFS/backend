@@ -67,6 +67,14 @@ namespace PortalLegisAmbiental.Domain.Entities
             UpdatedAt = null;
         }
 
+        public void SetCaminhoArquivo(string? caminhoArquivo)
+        {
+            if (!string.IsNullOrEmpty(caminhoArquivo))
+            {
+                CaminhoArquivo = caminhoArquivo;
+            }
+        }
+
         public void UpdateNumber(string? numero)
         {
             if (!string.IsNullOrEmpty(numero))

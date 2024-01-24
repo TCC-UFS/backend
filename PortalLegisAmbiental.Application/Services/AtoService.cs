@@ -1,6 +1,6 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Hosting;
 using PortalLegisAmbiental.Application.Services.Interfaces;
 using PortalLegisAmbiental.Domain.Dtos;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
@@ -22,12 +22,13 @@ namespace PortalLegisAmbiental.Application.Services
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IValidator<AddAtoRequest> _addValidator;
         private readonly IValidator<UpdateAtoRequest> _updateValidator;
+        private readonly IWebHostEnvironment _environment;
         private readonly IMapper _mapper;
 
         public AtoService(IAtoRepository atoRepository, ITipoAtoRepository tipoAtoRepository,
             IJurisdicaoRepository jurisdicaoRepository, IUsuarioRepository usuarioRepository,
             IValidator<AddAtoRequest> addValidator, IValidator<UpdateAtoRequest> updateValidator,
-            IMapper mapper, ISearchRepository elasticRepository)
+            IMapper mapper, ISearchRepository elasticRepository, IWebHostEnvironment environment)
         {
             _atoRepository = atoRepository;
             _elasticRepository = elasticRepository;
@@ -36,6 +37,7 @@ namespace PortalLegisAmbiental.Application.Services
             _usuarioRepository = usuarioRepository;
             _addValidator = addValidator;
             _updateValidator = updateValidator;
+            _environment = environment;
             _mapper = mapper;
         }
 
@@ -70,6 +72,44 @@ namespace PortalLegisAmbiental.Application.Services
                     "ALREADY_REGISTRED", "Ato já cadastrado.",
                     HttpStatusCode.NotFound);
 
+            if (atoRequest.File != null)
+            {
+                string jur = "";
+                string tipo = "";
+                if (ato.TipoAtoId == 1) // Lei Ordinária
+                    tipo = "LO";
+                else if (ato.TipoAtoId == 2) // Lei Complementar
+                    tipo = "LC";
+
+                if (ato.JurisdicaoId == 1) // Brasil
+                    jur = "BR";
+                else if (ato.JurisdicaoId == 2) // Sergipe
+                    jur = "SE";
+                else if (ato.JurisdicaoId == 3) // Amazonas
+                    jur = "AM";
+                else jur = "DEFAULT";
+
+                var fileName = $"{jur}/{tipo}/{atoRequest.File.FileName}";
+                if (!fileName.EndsWith(".pdf"))
+                    fileName += ".pdf";
+
+                var filePath = Path.Combine(_environment.WebRootPath, $"{fileName}");
+                var dirJurPath = Path.Combine(_environment.WebRootPath, $"{jur}");
+                var dirTypePath = Path.Combine(_environment.WebRootPath, $"{jur}/{tipo}");
+                using (var fileSteam = new FileStream(filePath, FileMode.Create))
+                {
+                    if (!Directory.Exists(dirJurPath))
+                        Directory.CreateDirectory(dirJurPath);
+                    
+                    if (!Directory.Exists(dirTypePath)) 
+                        Directory.CreateDirectory(dirTypePath);
+                    
+                    await atoRequest.File.CopyToAsync(fileSteam);
+                }
+
+                ato.SetCaminhoArquivo(fileName);
+            }
+
             var transaction = _atoRepository.UnitOfWork.BeginTransaction();
 
             await _atoRepository.Add(ato);
@@ -79,7 +119,7 @@ namespace PortalLegisAmbiental.Application.Services
             {
                 var jur = await _jurisdicaoRepository.GetById(atoRequest.JurisdicaoId, true);
                 var tpAto = await _tipoAtoRepository.GetById(atoRequest.TipoAtoId, true);
-                
+
                 string? tipoAtoStr = string.Empty;
                 if (tpAto != null)
                     tipoAtoStr = tpAto.Nome.ToLower().Replace(" ", "_")?.Replace("-", "_");
@@ -91,15 +131,15 @@ namespace PortalLegisAmbiental.Application.Services
                 ElasticDto.Data elasticData = new()
                 {
                     IdAto = ato.Id,
-                    Numero = ato.Numero,
-                    Ementa = ato.Ementa,
+                    //Numero = ato.Numero,
+                    //Ementa = ato.Ementa,
                     Conteudo = atoRequest.Conteudo ?? string.Empty,
                     Html = atoRequest.Html ?? string.Empty,
                     Ambito = jurStr,
                     Jurisdicao = jur?.Sigla ?? string.Empty,
                     TipoAto = tipoAtoStr ?? string.Empty,
-                    DataAto = ato.DataAto,
-                    DataPublicacao = ato.DataPublicacao == default ? ato.DataAto : ato.DataPublicacao,
+                    //DataAto = ato.DataAto,
+                    //DataPublicacao = ato.DataPublicacao == default ? ato.DataAto : ato.DataPublicacao,
                     Disponivel = ato.Disponivel
                 };
 
@@ -235,6 +275,44 @@ namespace PortalLegisAmbiental.Application.Services
                         HttpStatusCode.NotFound);
             }
 
+            if (atoRequest.File != null)
+            {
+                string jur = "";
+                string tipo = "";
+                if (ato.TipoAtoId == 1) // Lei Ordinária
+                    tipo = "LO";
+                else if (ato.TipoAtoId == 2) // Lei Complementar
+                    tipo = "LC";
+
+                if (ato.JurisdicaoId == 1) // Brasil
+                    jur = "BR";
+                else if (ato.JurisdicaoId == 2) // Sergipe
+                    jur = "SE";
+                else if (ato.JurisdicaoId == 3) // Amazonas
+                    jur = "AM";
+                else jur = "DEFAULT";
+
+                var fileName = $"{jur}/{tipo}/{atoRequest.File.FileName}";
+                if (!fileName.EndsWith(".pdf"))
+                    fileName += ".pdf";
+
+                var filePath = Path.Combine(_environment.WebRootPath, $"{fileName}");
+                var dirJurPath = Path.Combine(_environment.WebRootPath, $"{jur}");
+                var dirTypePath = Path.Combine(_environment.WebRootPath, $"{jur}/{tipo}");
+                using (var fileSteam = new FileStream(filePath, FileMode.Create))
+                {
+                    if (!Directory.Exists(dirJurPath))
+                        Directory.CreateDirectory(dirJurPath);
+
+                    if (!Directory.Exists(dirTypePath))
+                        Directory.CreateDirectory(dirTypePath);
+
+                    await atoRequest.File.CopyToAsync(fileSteam);
+                }
+
+                ato.SetCaminhoArquivo(fileName);
+            }
+
             if (ato.PossuiConteudo || ato.PossuiHtml)
             {
                 var jur = await _jurisdicaoRepository.GetById(ato.JurisdicaoId, true);
@@ -269,15 +347,15 @@ namespace PortalLegisAmbiental.Application.Services
                 ElasticDto.Data elasticData = new()
                 {
                     IdAto = ato.Id,
-                    Numero = ato.Numero,
-                    Ementa = ato.Ementa,
+                    //Numero = ato.Numero,
+                    //Ementa = ato.Ementa,
                     Conteudo = atoRequest.Conteudo ?? content?.Conteudo ?? string.Empty,
                     Html = atoRequest.Html ?? content?.Html ?? string.Empty,
                     Ambito = jurStr,
                     Jurisdicao = jur?.Sigla ?? string.Empty,
                     TipoAto = tipoAtoStr ?? string.Empty,
-                    DataAto = ato.DataAto,
-                    DataPublicacao = ato.DataPublicacao == default ? ato.DataAto : ato.DataPublicacao,
+                    //DataAto = ato.DataAto,
+                    //DataPublicacao = ato.DataPublicacao == default ? ato.DataAto : ato.DataPublicacao,
                     Disponivel = ato.Disponivel
                 };
 

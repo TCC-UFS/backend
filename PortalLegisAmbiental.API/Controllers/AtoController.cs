@@ -12,17 +12,26 @@ namespace PortalLegisAmbiental.API.Controllers
     public class AtoController : BaseController
     {
         private readonly IAtoService _atoService;
+        private readonly IAccessService _accessService;
 
-        public AtoController(IAtoService atoService)
+        public AtoController(IAtoService atoService, IAccessService accessService)
         {
             _atoService = atoService;
+            _accessService = accessService;
         }
 
         [Authorize]
         [Permission]
         [HttpPost]
-        public async Task<IActionResult> Add(AddAtoRequest request)
+        public async Task<IActionResult> Add([FromForm] AddAtoRequest request)
         {
+            var user = _accessService.GetLoggedUser(HttpContext.User);
+
+            if (user == null)
+                return Failed("User not found.");
+
+            request.CreatedById = user.Id;
+            request.CaminhoArquivo = string.Empty;
             var ato = await _atoService.Add(request);
             return Ok(ato);
         }
@@ -45,9 +54,13 @@ namespace PortalLegisAmbiental.API.Controllers
         [Authorize]
         [Permission]
         [HttpPatch("update/{id}")]
-        public async Task<IActionResult> Update(ulong id, UpdateAtoRequest request)
+        public async Task<IActionResult> Update(ulong id, [FromForm] UpdateAtoRequest request)
         {
             request.Id = id;
+            
+            if (request.File != null)
+                request.CaminhoArquivo = Path.GetFullPath("../wwwroot");
+
             await _atoService.Update(request);
             return NoContent();
         }

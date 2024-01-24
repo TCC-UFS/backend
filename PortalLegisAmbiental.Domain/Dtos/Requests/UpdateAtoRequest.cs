@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.AspNetCore.Http;
+using System.Text.Json.Serialization;
 
 namespace PortalLegisAmbiental.Domain.Dtos.Requests
 {
@@ -11,6 +12,7 @@ namespace PortalLegisAmbiental.Domain.Dtos.Requests
         public DateTime? DataPublicacao { get; set; }
         public DateTime? DataAto { get; set; }
         public string? CaminhoArquivo { get; set; }
+        public IFormFile? File { get; set; }
         public string? Conteudo { get; set; }
         public string? Html { get; set; }
         public bool? Disponivel { get; set; }

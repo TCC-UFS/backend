@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
 
 namespace PortalLegisAmbiental.Application.Validators
@@ -31,6 +32,22 @@ namespace PortalLegisAmbiental.Application.Validators
             RuleFor(ato => ato.TipoAtoId)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty();
+
+            RuleFor(ato => ato.File)
+                .Cascade(CascadeMode.Stop)
+                .Must(FileValidation)
+                .WithMessage("Apenas arquivos do tipo PDF são aceitos.");
+        }
+
+        private bool FileValidation(IFormFile? file)
+        {
+            if (file == null)
+                return true;
+
+            if (!file.ContentType.Equals("application/pdf"))
+                return false;
+
+            return true;
         }
     }
 
@@ -45,6 +62,22 @@ namespace PortalLegisAmbiental.Application.Validators
             RuleFor(ato => ato.Numero)
                 .Cascade(CascadeMode.Stop)
                 .MaximumLength(15);
+
+            RuleFor(ato => ato.File)
+                .Cascade(CascadeMode.Stop)
+                .Must(FileValidation)
+                .WithMessage("Apenas arquivos do tipo PDF são aceitos.");
+        }
+
+        private bool FileValidation(IFormFile? file)
+        {
+            if (file == null)
+                return true;
+
+            if (!file.ContentType.Equals("pdf"))
+                return false;
+
+            return true;
         }
     }
 }
