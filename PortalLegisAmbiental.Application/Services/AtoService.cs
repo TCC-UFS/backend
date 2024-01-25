@@ -111,8 +111,6 @@ namespace PortalLegisAmbiental.Application.Services
                 ato.SetCaminhoArquivo(fileName);
             }
 
-            var transaction = _atoRepository.UnitOfWork.BeginTransaction();
-
             await _atoRepository.Add(ato);
             _atoRepository.UnitOfWork.SaveChanges();
 
@@ -144,18 +142,8 @@ namespace PortalLegisAmbiental.Application.Services
                     Disponivel = ato.Disponivel
                 };
 
-                try
-                {
-                    await _elasticRepository.AddOrUpdate(elasticData);
-                }
-                catch (Exception)
-                {
-                    await transaction.RollbackAsync();
-                    throw;
-                }
+                await _elasticRepository.AddOrUpdate(elasticData);
             }
-
-            await transaction.CommitAsync();
 
             return _mapper.Map<AtoResponse>(ato);
         }
