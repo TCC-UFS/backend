@@ -217,6 +217,7 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
                 .CountAsync(atoEntity => 
                     atoEntity.TipoAtoId.Equals(ato.TipoAtoId)
                     && atoEntity.Numero.Replace(".", string.Empty).Equals(ato.Numero.Replace(".", string.Empty))
+                    && atoEntity.JurisdicaoId.Equals(ato.JurisdicaoId)
                     && atoEntity.IsActive) > 0;
         }
     }
