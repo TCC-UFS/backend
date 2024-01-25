@@ -22,8 +22,24 @@ namespace PortalLegisAmbiental.API.Controllers
 
         [Authorize]
         [Permission]
+        [HttpPost("files")]
+        public async Task<IActionResult> AddWithFile([FromForm] AddAtoRequest request)
+        {
+            var user = _accessService.GetLoggedUser(HttpContext.User);
+
+            if (user == null)
+                return Failed("User not found.");
+
+            request.CreatedById = user.Id;
+            request.CaminhoArquivo = string.Empty;
+            var ato = await _atoService.Add(request);
+            return Ok(ato);
+        }
+
+        [Authorize]
+        [Permission]
         [HttpPost]
-        public async Task<IActionResult> Add([FromForm] AddAtoRequest request)
+        public async Task<IActionResult> Add(AddAtoRequest request)
         {
             var user = _accessService.GetLoggedUser(HttpContext.User);
 
