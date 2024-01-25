@@ -10,9 +10,19 @@ namespace PortalLegisAmbiental.Infrastructure.ElasticSearch
     public class SearchRepository : ISearchRepository
     {
         private readonly HttpClient _httpClient;
+        private readonly HttpClient _client;
 
         public SearchRepository(IHttpClientFactory httpClientFactory)
         {
+            _client = new HttpClient();
+            var uri = Environment.GetEnvironmentVariable("ELASTIC_URL");
+            var authString = Environment.GetEnvironmentVariable("ELASTIC_TOKEN");
+
+            if (string.IsNullOrEmpty(uri) || string.IsNullOrEmpty(authString))
+                throw new NotSupportedException("Um erro interno ocorreu.");
+
+            _client.BaseAddress = new Uri(uri);
+            _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", authString);
             try
             {
                 _httpClient = httpClientFactory.CreateClient("Elastic");
@@ -116,7 +126,7 @@ namespace PortalLegisAmbiental.Infrastructure.ElasticSearch
             });
             var strContent = new StringContent(content, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PutAsync($"{index}/_doc/{elasticData.IdAto}", strContent);
+            var response = await _client.PutAsync($"{index}/_doc/{elasticData.IdAto}", strContent);
             if (!response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
