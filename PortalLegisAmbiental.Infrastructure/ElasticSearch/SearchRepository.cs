@@ -1,6 +1,7 @@
 ﻿using PortalLegisAmbiental.Domain.Dtos;
 using PortalLegisAmbiental.Domain.Exceptions;
 using PortalLegisAmbiental.Domain.IRepositories;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -14,10 +15,25 @@ namespace PortalLegisAmbiental.Infrastructure.ElasticSearch
 
         public SearchRepository(IHttpClientFactory httpClientFactory)
         {
-            _client = new HttpClient();
             var uri = Environment.GetEnvironmentVariable("ELASTIC_URL");
             var authString = Environment.GetEnvironmentVariable("ELASTIC_TOKEN");
 
+            var handler = new HttpClientHandler();
+            handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+            handler.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+            var path = "/var/www/ssl/projetosufs.cloud/es2/cert.pem";
+
+            if (File.Exists(path))
+            {
+                handler.ClientCertificates.Add(new X509Certificate2(path));
+                handler.ServerCertificateCustomValidationCallback =
+                (httpRequestMessage, cert, cetChain, policyErrors) =>
+                {
+                    return true;
+                };
+            }
+
+            _client = new HttpClient(handler);
             if (string.IsNullOrEmpty(uri) || string.IsNullOrEmpty(authString))
                 throw new NotSupportedException("Um erro interno ocorreu.");
 
