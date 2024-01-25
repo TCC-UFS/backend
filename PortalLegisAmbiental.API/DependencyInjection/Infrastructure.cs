@@ -17,7 +17,7 @@ namespace PortalLegisAmbiental.API.DependencyInjection
             services.AddScoped<IGrupoRepository, GrupoRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IAtoRepository, AtoRepository>();
-            services.AddScoped<ISearchRepository, SearchRepository>();
+            services.AddTransient<ISearchRepository, SearchRepository>();
         }
     }
 }
