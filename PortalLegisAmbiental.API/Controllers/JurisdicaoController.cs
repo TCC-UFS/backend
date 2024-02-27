@@ -7,7 +7,6 @@ using PortalLegisAmbiental.Domain.Dtos.Requests;
 
 namespace PortalLegisAmbiental.API.Controllers
 {
-    [Authorize]
     [Permission]
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/jurisdicoes")]
@@ -20,12 +19,14 @@ namespace PortalLegisAmbiental.API.Controllers
             _jurisdicaoService = jurisdicaoService;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add(AddJurisdicaoRequest request)
         {
             await _jurisdicaoService.Add(request);
             return NoContent();
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAll(string? state, string? sigla, string? ambito, string? order)
         {
@@ -33,6 +34,7 @@ namespace PortalLegisAmbiental.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(ulong id)
         {
@@ -40,6 +42,7 @@ namespace PortalLegisAmbiental.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> Update(ulong id, UpdateJurisdicaoRequest request)
         {
@@ -48,6 +51,7 @@ namespace PortalLegisAmbiental.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("disable")]
         public async Task<IActionResult> Disable(ulong id)
         {
