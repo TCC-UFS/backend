@@ -181,7 +181,7 @@ namespace PortalLegisAmbiental.Application.Services
                 var content = contentData.Data.FirstOrDefault();
                 if (content != null)
                 {
-                    atoDto.ConteudoHtml = content.Html;
+                    atoDto.ConteudoHtml = content.Conteudo;
                 }
             }
             else if (ato != null && !string.IsNullOrEmpty(ato.CaminhoArquivo))

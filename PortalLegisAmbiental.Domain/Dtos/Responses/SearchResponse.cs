@@ -22,7 +22,6 @@
         public DateTime DataPublicacao { get; set; }
         public DateTime DataAto { get; set; }
         public string Conteudo { get; set; } = null!;
-        public string Html { get; set; } = null!;
         public bool Disponivel { get; set; }
         public string TipoAto { get; set; } = null!;
         public string Jurisdicao { get; set; } = null!;
