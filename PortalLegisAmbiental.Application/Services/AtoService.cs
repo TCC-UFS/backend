@@ -186,8 +186,11 @@ namespace PortalLegisAmbiental.Application.Services
             }
             else if (ato != null && !string.IsNullOrEmpty(ato.CaminhoArquivo))
             {
-                var file = await File.ReadAllBytesAsync(ato.CaminhoArquivo);
-                atoDto.Arquivo = Convert.ToBase64String(file);
+                var path = Path.Combine("wwwroot", ato.CaminhoArquivo);
+                if (File.Exists(path)) {
+                    var file = await File.ReadAllBytesAsync(path);
+                    atoDto.Arquivo = Convert.ToBase64String(file);
+                }
             }
 
             return atoDto;
