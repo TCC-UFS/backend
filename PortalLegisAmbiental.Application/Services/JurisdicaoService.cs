@@ -69,6 +69,12 @@ namespace PortalLegisAmbiental.Application.Services
             return _mapper.Map<List<JurisdicaoResponse>>(jurisdicoes);
         }
 
+        public async Task<List<JurisdicaoDropdownResponse>> GetDropdown()
+        {
+            var jurisdicoes = await _jurisdicaoRepository.Search();
+            return _mapper.Map<List<JurisdicaoDropdownResponse>>(jurisdicoes);
+        }
+
         public async Task<JurisdicaoResponse> GetById(ulong id)
         {
             var jurisdicao = await _jurisdicaoRepository.GetById(id, true);

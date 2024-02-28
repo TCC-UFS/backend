@@ -1,4 +1,6 @@
-﻿namespace PortalLegisAmbiental.Domain.Dtos.Responses
+﻿using Microsoft.AspNetCore.Http;
+
+namespace PortalLegisAmbiental.Domain.Dtos.Responses
 {
     public class AtoResponse
     {
@@ -14,5 +16,7 @@
         public TipoAtoResponse TipoAto { get; set; } = null!;
         public JurisdicaoResponse Jurisdicao { get; set; } = null!;
         public UsuarioResponse CreatedBy { get; set; } = null!;
+        public string ConteudoHtml { get; set; } = null!;
+        public string Arquivo { get; set; } = null!;
     }
 }

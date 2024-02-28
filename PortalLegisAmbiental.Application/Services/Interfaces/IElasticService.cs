@@ -6,5 +6,6 @@ namespace PortalLegisAmbiental.Application.Services.Interfaces
     public interface IElasticService
     {
         Task<SearchResponse> Search(SearchRequest request, int page, int limit);
+        Task<SearchResponse> SearchById(ulong id);
     }
 }

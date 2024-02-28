@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using PortalLegisAmbiental.Application.Services.Interfaces;
 using PortalLegisAmbiental.Domain.Dtos;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
@@ -15,6 +16,7 @@ namespace PortalLegisAmbiental.Application.Services
 {
     public class AtoService : IAtoService
     {
+        private readonly IElasticService _elasticService; 
         private readonly IAtoRepository _atoRepository;
         private readonly ISearchRepository _elasticRepository;
         private readonly ITipoAtoRepository _tipoAtoRepository;
@@ -28,8 +30,10 @@ namespace PortalLegisAmbiental.Application.Services
         public AtoService(IAtoRepository atoRepository, ITipoAtoRepository tipoAtoRepository,
             IJurisdicaoRepository jurisdicaoRepository, IUsuarioRepository usuarioRepository,
             IValidator<AddAtoRequest> addValidator, IValidator<UpdateAtoRequest> updateValidator,
-            IMapper mapper, ISearchRepository elasticRepository, IWebHostEnvironment environment)
+            IMapper mapper, ISearchRepository elasticRepository, IWebHostEnvironment environment,
+            IElasticService elasticService)
         {
+            _elasticService = elasticService;
             _atoRepository = atoRepository;
             _elasticRepository = elasticRepository;
             _tipoAtoRepository = tipoAtoRepository;
@@ -169,7 +173,24 @@ namespace PortalLegisAmbiental.Application.Services
         public async Task<AtoResponse?> GetById(ulong id)
         {
             var ato = await _atoRepository.GetById(id, includeTipo: true, includeJurisdicao: true, includeCreated: true);
-            return _mapper.Map<AtoResponse?>(ato);
+            var atoDto = _mapper.Map<AtoResponse>(ato);
+            
+            if (ato != null && ato.PossuiHtml)
+            {
+                var contentData = await _elasticService.SearchById(ato.Id);
+                var content = contentData.Data.FirstOrDefault();
+                if (content != null)
+                {
+                    atoDto.ConteudoHtml = content.Html;
+                }
+            }
+            else if (ato != null && !string.IsNullOrEmpty(ato.CaminhoArquivo))
+            {
+                var file = await File.ReadAllBytesAsync(ato.CaminhoArquivo);
+                atoDto.Arquivo = Convert.ToBase64String(file);
+            }
+
+            return atoDto;
         }
 
         public async Task<AtoResponse?> GetByNumber(string number)

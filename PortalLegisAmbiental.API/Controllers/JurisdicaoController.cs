@@ -27,10 +27,19 @@ namespace PortalLegisAmbiental.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
+        [Permission]
         [HttpGet]
         public async Task<IActionResult> GetAll(string? state, string? sigla, string? ambito, string? order)
         {
             var response = await _jurisdicaoService.Search(state, sigla, ambito, order ?? "asc");
+            return Ok(response);
+        }
+
+        [HttpGet("dropdown")]
+        public async Task<IActionResult> GetDropdown()
+        {
+            var response = await _jurisdicaoService.GetDropdown();
             return Ok(response);
         }
 

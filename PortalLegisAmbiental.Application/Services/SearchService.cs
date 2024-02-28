@@ -1,11 +1,13 @@
 ﻿
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using PortalLegisAmbiental.Application.Services.Interfaces;
 using PortalLegisAmbiental.Domain.Dtos;
 using PortalLegisAmbiental.Domain.Dtos.Requests;
 using PortalLegisAmbiental.Domain.Dtos.Responses;
 using PortalLegisAmbiental.Domain.Exceptions;
 using PortalLegisAmbiental.Domain.IRepositories;
+using System.Collections.Generic;
 
 namespace PortalLegisAmbiental.Application.Services
 {
@@ -181,6 +183,49 @@ namespace PortalLegisAmbiental.Application.Services
             response.Pagination.Page = page;
             response.Pagination.Limit = limit;
             
+            return response;
+        }
+
+        public async Task<SearchResponse> SearchById(ulong id)
+        {
+            var query = new ElasticDto.Search
+            {
+                BaseQuery = new()
+                {
+                    Query = new()
+                    {
+                        Bool = new()
+                        {
+                            Must = new List<object> {
+                                new {
+                                    match = new
+                                    {
+                                        idAto = new
+                                        {
+                                            query = id
+                                        }
+                                    }
+                                }
+                            },
+                            Filter = new()
+                            {
+                                new()
+                                {
+                                    Term = new
+                                    {
+                                        disponivel = true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            var contents = await _searchRepository.Search(query);
+
+            var response = _mapper.Map<SearchResponse>(contents);
+
             return response;
         }
     }
