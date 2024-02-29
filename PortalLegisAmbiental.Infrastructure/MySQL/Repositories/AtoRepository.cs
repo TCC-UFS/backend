@@ -28,16 +28,16 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             var stats = new StatsResponse();
             
             stats.LeisOrdinariasEstaduais = await _dbContext.Atos
-                .CountAsync(ato => !ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(2));
+                .CountAsync(ato => !ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(1));
 
             stats.LeisOrdinariasFederais = await _dbContext.Atos
-                .CountAsync(ato => ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(2));
+                .CountAsync(ato => ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(1));
 
             stats.LeisComplementaresEstaduais = await _dbContext.Atos
-                .CountAsync(ato => !ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(3));
+                .CountAsync(ato => !ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(2));
 
             stats.LeisComplementaresFederais = await _dbContext.Atos
-                .CountAsync(ato => ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(3));
+                .CountAsync(ato => ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(2));
 
             return stats;
         }
