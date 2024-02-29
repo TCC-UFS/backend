@@ -20,6 +20,13 @@ namespace PortalLegisAmbiental.API.Controllers
             _accessService = accessService;
         }
 
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats()
+        {
+            var stats = await _atoService.GetStats();
+            return Ok(stats);
+        }
+
         [Authorize]
         [Permission]
         [HttpPost("files")]
