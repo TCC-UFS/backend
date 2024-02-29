@@ -164,6 +164,11 @@ namespace PortalLegisAmbiental.Application.Services
             return _mapper.Map<AtoResponse>(ato);
         }
 
+        public async Task<StatsResponse> GetStats()
+        {
+            return await _atoRepository.GetStats();
+        }
+
         public async Task<List<AtoResponse>> GetAll()
         {
             var atos = await _atoRepository.GetAll(includeTipo: true, includeJurisdicao: true);

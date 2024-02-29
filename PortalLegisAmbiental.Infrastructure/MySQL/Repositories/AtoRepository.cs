@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PortalLegisAmbiental.Domain.Dtos.Responses;
 using PortalLegisAmbiental.Domain.Entities;
 using PortalLegisAmbiental.Domain.Enums;
 using PortalLegisAmbiental.Domain.IRepositories;
@@ -20,6 +21,25 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
         {
             var added = await _dbContext.Atos.AddAsync(ato);
             return added.Entity;
+        }
+
+        public async Task<StatsResponse> GetStats()
+        {
+            var stats = new StatsResponse();
+            
+            stats.LeisOrdinariasEstaduais = await _dbContext.Atos
+                .CountAsync(ato => !ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(2));
+
+            stats.LeisOrdinariasFederais = await _dbContext.Atos
+                .CountAsync(ato => ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(2));
+
+            stats.LeisComplementaresEstaduais = await _dbContext.Atos
+                .CountAsync(ato => !ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(3));
+
+            stats.LeisComplementaresFederais = await _dbContext.Atos
+                .CountAsync(ato => ato.JurisdicaoId.Equals(1) && ato.TipoAtoId.Equals(3));
+
+            return stats;
         }
 
         public async Task<List<Ato>> GetAll(bool includeJurisdicao = false, bool includeCreated = false, bool includeTipo = false, bool tracking = false, string order = "desc")

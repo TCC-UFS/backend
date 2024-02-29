@@ -6,6 +6,7 @@ namespace PortalLegisAmbiental.Application.Services.Interfaces
     public interface IAtoService
     {
         Task<AtoResponse> Add(AddAtoRequest atoRequest);
+        Task<StatsResponse> GetStats();
         Task<List<AtoResponse>> GetAll();
         Task<AtoResponse?> GetById(ulong id);
         Task<AtoResponse?> GetByNumber(string number);

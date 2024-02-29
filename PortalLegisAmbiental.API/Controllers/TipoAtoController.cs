@@ -7,8 +7,6 @@ using PortalLegisAmbiental.Domain.Dtos.Requests;
 
 namespace PortalLegisAmbiental.API.Controllers
 {
-    [Authorize]
-    [Permission]
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/tipos-atos")]
     public class TipoAtoController : BaseController
@@ -20,6 +18,8 @@ namespace PortalLegisAmbiental.API.Controllers
             _tipoAtoService = tipoAtoService;
         }
 
+        [Authorize]
+        [Permission]
         [HttpPost]
         public async Task<IActionResult> Add(AddTipoAtoRequest request)
         {
@@ -34,6 +34,8 @@ namespace PortalLegisAmbiental.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
+        [Permission]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(ulong id)
         {
@@ -41,6 +43,8 @@ namespace PortalLegisAmbiental.API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
+        [Permission]
         [HttpPatch("update/{id}")]
         public async Task<IActionResult> Update(ulong id, UpdateTipoAtoRequest request)
         {
@@ -49,6 +53,8 @@ namespace PortalLegisAmbiental.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
+        [Permission]
         [HttpDelete("disable")]
         public async Task<IActionResult> Disable(ulong id)
         {
