@@ -135,11 +135,11 @@ namespace PortalLegisAmbiental.Application.Services
                 {
                     baseSearch.BaseQuery.Query.Bool.Must.Add(new
                     {
-                        match_phrase = new
+                        query_string = new
                         {
                             conteudo = new
                             {
-                                query = request.Termo.Trim()
+                                query = $"\"{request.Termo.Trim()}\""
                             }
                         }
                     });
