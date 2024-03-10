@@ -60,11 +60,11 @@ namespace PortalLegisAmbiental.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string? numero, string? tipo, string? jurisdicao, string? order,
+        public async Task<IActionResult> GetAll(string? numero, string? tipo, string? jurisdicao, string? order, string? ano,
             int page = 1, int limit = 10)
         {
             if (string.IsNullOrEmpty(order)) order = "desc";
-            var response = await _atoService.Search(numero, tipo, jurisdicao, order, page, limit);
+            var response = await _atoService.Search(numero, tipo, jurisdicao, ano, order, page, limit);
             return Ok(response);
         }
 

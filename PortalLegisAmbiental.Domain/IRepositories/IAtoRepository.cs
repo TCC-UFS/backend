@@ -11,7 +11,7 @@ namespace PortalLegisAmbiental.Domain.IRepositories
         Task<List<Ato>> GetAll(bool includeJurisdicao = false, bool includeCreated = false, bool includeTipo = false, bool tracking = false, string order = "desc");
         Task<Ato?> GetById(ulong id, bool includeJurisdicao = false, bool includeCreated = false, bool includeTipo = false, bool tracking = false);
         Task<Ato?> GetByNumber(string number, bool includeJurisdicao = false, bool includeCreated = false, bool includeTipo = false, bool tracking = false);
-        Task<List<Ato>> Search(string? numero = null, string? tipo = null, string? jurisdicao = null, EAmbitoType? ambito = null,
+        Task<List<Ato>> Search(string? numero = null, string? tipo = null, string? jurisdicao = null, EAmbitoType? ambito = null, string? ano = null,
                                             bool includeJurisdicao = false, bool includeCreated = false, bool includeTipo = false, bool tracking = false,
                                             string order = "desc", ulong[] ids = null!, int page = 1, int limit = 10);
         Task<List<Ato>> SearchByNumber(string number, bool includeJurisdicao = false, bool includeCreated = false, bool includeTipo = false, bool tracking = false);

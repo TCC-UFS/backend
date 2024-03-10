@@ -66,7 +66,7 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             return await atos.ToListAsync();
         }
 
-        public async Task<List<Ato>> Search(string? numero = null, string? tipo = null, string? jurisdicao = null, EAmbitoType? ambito = null, 
+        public async Task<List<Ato>> Search(string? numero = null, string? tipo = null, string? jurisdicao = null, EAmbitoType? ambito = null, string? ano = null,
                                             bool includeJurisdicao = false, bool includeCreated = false, bool includeTipo = false, bool tracking = false,
                                             string order = "desc", ulong[] ids = null!, int page = 1, int limit = 10)
         {
@@ -86,6 +86,9 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
 
             if (ids != null && ids.Length > 0)
                 atos = atos.Where(ato => ids.Contains(ato.Id));
+
+            if (!string.IsNullOrEmpty(ano))
+                atos = atos.Where(ato => ato.DataAto.Year.ToString().Equals(ano));
 
             if (!string.IsNullOrEmpty(numero))
                 atos = atos.Where(ato => ato.Numero.ToLower().Replace(".", string.Empty).StartsWith(numero.ToLower().Replace(".", string.Empty)));
