@@ -28,6 +28,7 @@ namespace PortalLegisAmbiental.Domain.Dtos
 
         public class BaseQuery
         {
+            public List<string>? _source { get; set; } = null;
             public List<object> Sort { get; set; } = null!;
             public int From { get; set; } = 0;
             public int Size { get; set; } = 10;

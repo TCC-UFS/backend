@@ -51,7 +51,7 @@ namespace PortalLegisAmbiental.Infrastructure.ElasticSearch
             }
         }
 
-        public async Task<ElasticDto.ReadResponse?> Search(ElasticDto.Search searchData)
+        public async Task<ElasticDto.ReadResponse?> Search(ElasticDto.Search searchData, bool getContent = true)
         {
             string index;
             if (searchData.Jurisdicao == null) index = "/";
@@ -71,6 +71,15 @@ namespace PortalLegisAmbiental.Infrastructure.ElasticSearch
 
                 if (searchData.BaseQuery != null)
                 {
+                    if (!getContent)
+                    {
+                        searchData.BaseQuery._source = new List<string>
+                        {
+                            "idAto", "numero", "ementa", "tipoAto", "ambito",
+                            "jurisdicao", "dataPublicacao", "dataAto", "disponivel"
+                        };
+                    }
+
                     content = JsonSerializer.Serialize(searchData.BaseQuery, new JsonSerializerOptions()
                     {
                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

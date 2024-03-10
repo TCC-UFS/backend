@@ -177,7 +177,7 @@ namespace PortalLegisAmbiental.Application.Services
                 });
             }
 
-            var contents = await _searchRepository.Search(baseSearch);
+            var contents = await _searchRepository.Search(baseSearch, false);
 
             var response = _mapper.Map<SearchResponse>(contents);
             response.Pagination.Page = page;
