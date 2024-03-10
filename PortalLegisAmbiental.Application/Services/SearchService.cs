@@ -43,7 +43,7 @@ namespace PortalLegisAmbiental.Application.Services
                 Jurisdicao = null,
                 BaseQuery = new()
                 {
-                    From = page-1,
+                    From = (page-1)*limit,
                     Size = limit,
                     Sort = new List<object>
                     {
