@@ -207,20 +207,17 @@ namespace PortalLegisAmbiental.Application.Services
             return _mapper.Map<AtoResponse?>(ato);
         }
 
-        public async Task<List<AtoResponse>> Search(string? numero = null, string? tipo = null, string? jurisdicao = null, string? ano = null, string order = "desc", int page = 1, int limit = 10)
+        public async Task<List<AtoResponse>> Search(string? numero = null, string? tipo = null, string? jurisdicao = null, string? ano = null, string order = "desc")
         {
-            if (page <= 0 || limit <= 0)
-                throw new PortalLegisDomainException("PAGE_OR_LIMIT_VIOLATION", "O número da página ou limite de resultados devem ser maior que 0.", HttpStatusCode.BadRequest);
-
             if (!string.IsNullOrEmpty(ano) && (!int.TryParse(ano, out _) || !DateOnly.TryParse($"{ano}-01-01", out _)))
                 throw new PortalLegisDomainException("INVALID_YEAR", $"{ano} não é um ano válido.", HttpStatusCode.BadRequest);
 
             List<Ato> atos;
             var isEnum = Enum.TryParse<EAmbitoType>(jurisdicao, true, out var ambito);
             if (isEnum)
-                atos = await _atoRepository.Search(numero: numero, tipo: tipo, ambito: ambito, ano: ano, includeTipo: true, includeJurisdicao: true, order: order, page: page, limit: limit);
+                atos = await _atoRepository.Search(numero: numero, tipo: tipo, ambito: ambito, ano: ano, includeTipo: true, includeJurisdicao: true, order: order);
             else
-                atos = await _atoRepository.Search(numero: numero, tipo: tipo, jurisdicao: jurisdicao, ano: ano, includeTipo: true, includeJurisdicao: true, order: order, page: page, limit: limit);
+                atos = await _atoRepository.Search(numero: numero, tipo: tipo, jurisdicao: jurisdicao, ano: ano, includeTipo: true, includeJurisdicao: true, order: order);
 
             return _mapper.Map<List<AtoResponse>>(atos);
         }

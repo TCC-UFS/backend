@@ -68,7 +68,7 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
 
         public async Task<List<Ato>> Search(string? numero = null, string? tipo = null, string? jurisdicao = null, EAmbitoType? ambito = null, string? ano = null,
                                             bool includeJurisdicao = false, bool includeCreated = false, bool includeTipo = false, bool tracking = false,
-                                            string order = "desc", ulong[] ids = null!, int page = 1, int limit = 10)
+                                            string order = "desc", ulong[] ids = null!)
         {
             var atos = _dbContext.Atos.Where(ato => ato.IsActive);
 
@@ -123,7 +123,7 @@ namespace PortalLegisAmbiental.Infrastructure.MySQL.Repositories
             else
                 atos = atos.OrderBy(ato => ato.DataAto.Year.Equals(1) ? ato.CreatedAt : ato.DataAto);
 
-            return await atos.Skip((page-1)*limit).Take(limit).ToListAsync();
+            return await atos.ToListAsync();
         }
 
         public async Task<Ato?> GetById(ulong id, bool includeJurisdicao = false, bool includeCreated = false, bool includeTipo = false, bool tracking = false)

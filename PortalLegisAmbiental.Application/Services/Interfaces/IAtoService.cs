@@ -10,7 +10,7 @@ namespace PortalLegisAmbiental.Application.Services.Interfaces
         Task<List<AtoResponse>> GetAll();
         Task<AtoResponse?> GetById(ulong id);
         Task<AtoResponse?> GetByNumber(string number);
-        Task<List<AtoResponse>> Search(string? numero = null, string? tipo = null, string? jurisdicao = null, string? ano = null, string order = "desc", int page = 1, int limit = 10);
+        Task<List<AtoResponse>> Search(string? numero = null, string? tipo = null, string? jurisdicao = null, string? ano = null, string order = "desc");
         Task<List<AtoResponse>> SearchByNumber(string number);
         Task<List<AtoResponse>> SearchByTipo(string tipoAto);
         Task<List<AtoResponse>> SearchByJurisdicao(string jurisdicao);
