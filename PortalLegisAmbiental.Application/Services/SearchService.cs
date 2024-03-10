@@ -139,7 +139,7 @@ namespace PortalLegisAmbiental.Application.Services
                         {
                             conteudo = new
                             {
-                                query = $"\"{request.Termo.Trim()}\""
+                                query = $"\"asdgasdkhja sgdjskhagssdgjahsgdajhsasd\""
                             }
                         }
                     });
