@@ -108,9 +108,8 @@ namespace PortalLegisAmbiental.Application.Services
 
             if (!string.IsNullOrEmpty(request.Termo))
             {
-                if (request.Termo.Trim().Split(" ").Length > 0)
+                if (request.Termo.Trim().Split(" ").Length == 1)
                 {
-                    throw new PortalLegisDomainException("TESTE", "TESTE-01");
                     var isNumber = int.TryParse(request.GrauAprox, out int grauAprox);
                     if (!string.IsNullOrEmpty(request.GrauAprox)
                         && !request.GrauAprox.ToLower().Equals("auto")
@@ -134,14 +133,13 @@ namespace PortalLegisAmbiental.Application.Services
                 }
                 else
                 {
-                    throw new PortalLegisDomainException("TESTE", "TESTE");
                     baseSearch.BaseQuery.Query.Bool.Must.Add(new
                     {
-                        query_string = new
+                        match_phrase = new
                         {
                             conteudo = new
                             {
-                                query = $"\"{request.Termo.Trim()}\""
+                                query = request.Termo.Trim()
                             }
                         }
                     });
