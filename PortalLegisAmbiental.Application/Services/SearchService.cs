@@ -8,6 +8,7 @@ using PortalLegisAmbiental.Domain.Dtos.Responses;
 using PortalLegisAmbiental.Domain.Exceptions;
 using PortalLegisAmbiental.Domain.IRepositories;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace PortalLegisAmbiental.Application.Services
 {
@@ -147,13 +148,20 @@ namespace PortalLegisAmbiental.Application.Services
 
             if (!string.IsNullOrEmpty(request.Numero))
             {
+                var number = request.Numero.Trim();
+                var isNumber = int.TryParse(number, out int numero);
+                if (isNumber)
+                {
+                    number = numero.ToString("N", new CultureInfo("pt-BR"));
+                }
+
                 baseSearch.BaseQuery.Query.Bool.Must.Add(new
                 {
                     match = new
                     {
                         numero = new
                         {
-                            query = request.Numero.Trim()
+                            query = number
                         }
                     }
                 });
