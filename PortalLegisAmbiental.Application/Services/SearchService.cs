@@ -151,7 +151,7 @@ namespace PortalLegisAmbiental.Application.Services
                 {
                     match = new
                     {
-                        idAto = new
+                        numero = new
                         {
                             query = request.Numero.Trim()
                         }
